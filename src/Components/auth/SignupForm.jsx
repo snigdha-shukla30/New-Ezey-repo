@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { signupAPI } from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
 // ✅ shared components
 import { Button } from "../../Components/ui/Button";
@@ -9,6 +10,7 @@ import { InputField } from "../../Components/ui/InputField";
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -165,9 +167,12 @@ const SignupForm = () => {
       
       <p className="text-center text-[12px] text-[#7A8C94] mb-4">
         Already a user ?{" "}
-        <span className="text-[#4BACCE] cursor-pointer">
-          Sign In
-        </span>
+        <span
+      className="text-[#4BACCE] cursor-pointer"
+      onClick={() => navigate("/login")}
+    >
+      Sign In
+    </span>
       </p>
     </>
   );

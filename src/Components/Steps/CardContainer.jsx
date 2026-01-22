@@ -15,7 +15,7 @@ export const CardContainer = ({ children, title }) => {
         "
       >
         {title && (
-          <p className="text-center text-teal-700 mb-10 text-xl leading-relaxed font-medium">
+          <p className="text-center text-teal-700 mb-8 text-sm mr-40  ml-40 leading-relaxed font-medium">
             {title}
           </p>
         )}

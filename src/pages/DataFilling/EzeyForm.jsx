@@ -31,18 +31,18 @@ const EzeyForm = () => {
       </div>
 
       {/* STEP NAVIGATION (TOP MOST LAYER) */}
-      <div className="fixed right-0 top-0 h-screen w-[450px] ">
+     
         <StepNavigation
           currentStep={currentStep}
           onStepClick={handleStepClick}
         />
-      </div>
+     
 
       {/* CARD AREA (GOES BEHIND STEPS) */}
 
       {/* CARD LAYER (LOWER STACK) */}
       <div className="relative z-10 min-h-screen flex items-center">
-        <div className="ml-[350px] ">
+        <div className="ml-[285px] ">
           {currentStep === 1 && <ERPConnectionScreen onNext={handleNext} />}
           {currentStep === 2 && <LoadchartScreen onNext={handleNext} />}
           {currentStep === 3 && <ManualEntryScreen />}

@@ -1,16 +1,16 @@
-
-import React, { useState } from 'react';
-import { CreditCard, Key } from 'lucide-react';
-import { CardContainer } from './CardContainer';
-import { InputField } from '../../Components/ui/InputField';
-import { Button } from '../../Components/ui/Button';
-import { Footer } from './Footer';
-
+import React, { useState } from "react";
+import { CreditCard, Key } from "lucide-react";
+import { CardContainer } from "./CardContainer";
+import { InputField } from "../../Components/ui/InputField";
+import { Button } from "../../Components/ui/Button";
+import { Footer } from "./Footer";
+import { useNavigate } from "react-router-dom";
 
 export const ERPConnectionScreen = ({ onNext }) => {
-  const [erpId, setErpId] = useState('');
-  const [password, setPassword] = useState('');
+  const [erpId, setErpId] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <CardContainer title="Connect your ERP to automatically sync faculty, timetable,  and classroom data — no manual setup required">
@@ -36,10 +36,8 @@ export const ERPConnectionScreen = ({ onNext }) => {
           />
         </div>
 
-        <div className="flex justify-center">
-          <Button onClick={onNext} className=" mr-40 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-700 hover:to-teal-600 text-white font-medium py-3 px-8 rounded-md shadow-md transition-all duration-200">
-            Connect ERP
-          </Button>
+        <div className="flex justify-center mr-4">
+          <Button onClick={() => navigate("/dashboard")}>Connect ERP</Button>
         </div>
       </div>
 
@@ -47,6 +45,3 @@ export const ERPConnectionScreen = ({ onNext }) => {
     </CardContainer>
   );
 };
-
-
-

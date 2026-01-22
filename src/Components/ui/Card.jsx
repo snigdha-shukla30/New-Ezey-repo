@@ -1,5 +1,6 @@
 import React from "react";
 
+
 export const CardContainer = ({
   children,
   title,
@@ -7,9 +8,9 @@ export const CardContainer = ({
 }) => {
   return (
     <div
-      className={`w-full bg-white rounded-[10px] border border-[#BFBFBF]
+      className={`w-full bg-white rounded-[10px] border border-[#BFBFBF] 
       shadow-[0_16px_40px_rgba(148,163,184,0.22)]
-      px-8 pt-6 pb-11 ${className}`}
+      px-8 pt-6 pb-8 ${className}`}
     >
       {title && (
         <h1
@@ -19,11 +20,7 @@ export const CardContainer = ({
           {title}
         </h1>
       )}
-
       {children}
     </div>
   );
 };
-
-
-

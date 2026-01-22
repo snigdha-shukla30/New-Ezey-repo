@@ -1,0 +1,205 @@
+/* ============================================
+   CUSTOM SCROLLBAR STYLES FOR EZEY PROJECT
+   ============================================ */
+
+/* Hide default scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Scrollbar Track - Right Side Positioning */
+.scroll-track-layout {
+  position: absolute;
+  right: 8px;
+  top: 60px;
+  bottom: 10px;
+  width: 8px;
+  height: 260px;
+  background: rgba(217, 217, 217, 0.3);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* Custom Scrollbar Thumb - Draggable */
+.scroll-thumb-layout {
+  position: absolute;
+  width: 8px;
+  height: 36.6854px;
+  background: linear-gradient(180deg, #4BACCE 0%, #265768 100%);
+  border-radius: 10px;
+  cursor: grab;
+  pointer-events: auto;
+  transition: background 0.2s ease;
+}
+
+.scroll-thumb-layout:active {
+  cursor: grabbing;
+  background: linear-gradient(180deg, #3a95b8 0%, #1e4a5a 100%);
+}
+
+.scroll-thumb-layout:hover {
+  background: linear-gradient(180deg, #5abfdf 0%, #2d6878 100%);
+}
+
+/* Placeholder text color correction for inputs */
+input::placeholder {
+  color: #9CA3AF !important;
+  opacity: 1;
+}
+
+input::-webkit-input-placeholder {
+  color: #9CA3AF !important;
+  opacity: 1;
+}
+
+input::-moz-placeholder {
+  color: #9CA3AF !important;
+  opacity: 1;
+}
+
+input:-ms-input-placeholder {
+  color: #9CA3AF !important;
+  opacity: 1;
+}
+
+/* Input field focus state - Enhanced border */
+input:focus {
+  outline: none;
+  border-color: #4BACCE;
+  box-shadow: 0 0 0 3px rgba(75, 172, 206, 0.1);
+}
+
+/* Custom select dropdown styling */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23265768' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+/* Table hover effects */
+.table-row-hover:hover {
+  background-color: #F9FAFB;
+  transition: background-color 0.15s ease;
+}
+
+/* Button hover transitions */
+.btn-gradient-hover {
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.btn-gradient-hover:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-gradient-hover:active {
+  transform: translateY(0);
+}
+
+/* Modal/Alert backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal container */
+.modal-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 51;
+  padding: 16px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 100%;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tab active indicator animation */
+.tab-indicator {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Vertical scrollbar for Dashboard Faculty list */
+.faculty-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #4BACCE #E5E7EB;
+}
+
+.faculty-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.faculty-scrollbar::-webkit-scrollbar-track {
+  background: #E5E7EB;
+  border-radius: 10px;
+}
+
+.faculty-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4BACCE 0%, #265768 100%);
+  border-radius: 10px;
+}
+
+.faculty-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #5abfdf 0%, #2d6878 100%);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+button, a, input, select, textarea {
+  transition: all 0.2s ease;
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+  outline: 2px solid #4BACCE;
+  outline-offset: 2px;
+}
+
+/* Remove outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
