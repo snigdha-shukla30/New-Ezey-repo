@@ -69,8 +69,10 @@ const Dashboard = () => {
       ];
 
   return (
-    <div className="min-h-screen h-screen bg-[#FFFFFF] flex px-2 py-4 gap-4 overflow-hidden" style={{ fontFamily: 'Mulish, sans-serif' }}>
-      <div className="shrink-0">
+    // <div className="min-h-screen h-screen bg-[#FFFFFF] flex px-2 py-4 gap-4 overflow-hidden" style={{ fontFamily: 'Mulish, sans-serif' }}>
+    <div className="h-screen bg-[#FFFFFF] flex px-2 pt-4 gap-4 overflow-hidden" style={{ fontFamily: 'Mulish, sans-serif' }}>
+
+       <div className="shrink-0">
         <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
       </div>
 
@@ -113,7 +115,7 @@ const Dashboard = () => {
                   />
                 </section>
 
-                <section className="flex items-start gap-15 mt-[-300px] mb-0.1">
+                <section className="flex items-start gap-15 mt-[-315px] mb-0.1">
                   <QuickReport quickReport={dashboardData?.quickReport} />
                   <UploadLoadset />
                 </section>

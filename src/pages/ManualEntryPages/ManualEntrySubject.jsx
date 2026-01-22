@@ -455,7 +455,7 @@ export default function ManualEntrySubject() {
                   className="bg-white w-full relative"
                   style={{
                     width: "100%",
-                    height: "360px",
+                    height: "325px",
                     borderRadius: "12.23px",
                     border: "1.83px solid #DFDFDF",
                     overflow: "hidden",
@@ -501,44 +501,9 @@ export default function ManualEntrySubject() {
                     </div>
                   </div>
 
-                  <style>{`
+                 
 
-                    .custom-input {
-  width: 274.5px;
-  height: 40px;
-  border-radius: 15px;
-  border: 1.5px solid #DFDFDF;
-  font-size: 14px;
-  font-family: 'Mulish', sans-serif;
-  color: #000000;
-  background: #FFFFFF;
-  padding: 0 12px;
-  box-sizing: border-box;
-  outline: none;
-  transition: 0.2s ease;
-}
-
-.custom-input:focus {
-  border: 1.5px solid #0b84d6;     /* focus border */
-  box-shadow: 0 0 0 3px rgba(11,132,214,0.2);  /* glow */
-}
-
-                    .custom-scroll::-webkit-scrollbar { width: 8.78px; }
-                    .custom-scroll::-webkit-scrollbar-track {
-                      background: transparent;
-                      border-radius: 44.02px;
-                      border: 1.22px solid #E5E5E5;
-                    }
-                    .custom-scroll::-webkit-scrollbar-thumb {
-                      background: linear-gradient(180deg, #575757 -93.33%, #75CBF6 100%);
-                      border-radius: 4.89px;
-                      width: 13.23px;
-                      min-height: 70px;
-                    }
-                    .custom-scroll::-webkit-scrollbar-thumb:hover {
-                      background: linear-gradient(180deg, #575757 -93.33%, #5BB8E8 100%);
-                    }
-                  `}</style>
+               
                 </div>
               </div>
             )}

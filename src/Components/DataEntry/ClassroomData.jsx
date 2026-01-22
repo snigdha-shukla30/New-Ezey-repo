@@ -39,8 +39,8 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
     try {
       const response = await deleteClassroom(classroomId);
       if (response.success) {
-        setClassrooms(classrooms.filter(c => c._id !== classroomId));
-        alert("Classroom deleted successfully!");
+        setClassrooms(classrooms.filter((c) => c._id !== classroomId));
+        
       } else {
         alert(response.message || "Failed to delete classroom");
       }
@@ -56,7 +56,6 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
   };
 
   const handleUpdate = async () => {
-    // Validation
     if (!editData.type.trim()) {
       alert("Classroom type is required");
       return;
@@ -69,18 +68,18 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
     try {
       const response = await updateClassroom(editingId, {
         capacity: Number(editData.capacity),
-        type: editData.type.trim()
+        type: editData.type.trim(),
       });
 
       if (response.success) {
-        setClassrooms(classrooms.map(c => 
-          c._id === editingId 
-            ? { ...c, ...response.data }
-            : c
-        ));
+        setClassrooms(
+          classrooms.map((c) =>
+            c._id === editingId ? { ...c, ...response.data } : c
+          )
+        );
         setEditingId(null);
         setEditData(null);
-        alert("Classroom updated successfully!");
+       
       } else {
         alert(response.message || "Failed to update classroom");
       }
@@ -104,121 +103,155 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
       className="bg-white rounded-[10px] border border-[#DFDFDF] w-full shadow-sm"
       style={{ maxWidth: "1068px", minHeight: "293px" }}
     >
-      {/* Header row */}
-      <div className="flex items-center px-8 py-3 text-[13px] font-semibold text-[#6C7A90] border-b-2 border-[#1DA5FF]">
-        <div className="flex-[1.5]">Classroom Name</div>
-        <div className="flex-[1.5] text-center">Classroom Type</div>
-        <div className="flex-[1] text-center">Capacity</div>
-        <div className="w-20 text-center">Actions</div>
+      <div className="px-8 pt-4">
+        {/* TABLE HEADER (Fixed column widths) */}
+        <table className="w-full table-fixed">
+          <colgroup>
+            <col style={{ width: "25%" }} />
+            <col style={{ width: "25%" }} />
+            <col style={{ width: "25%" }} />
+            <col style={{ width: "25%" }} />
+          </colgroup>
+
+          <thead>
+            <tr className="text-[13px] font-semibold text-[#6C7A90]">
+              <th className="text-center pb-3">Classroom Name</th>
+              <th className="text-center pb-3">Classroom Type</th>
+              <th className="text-center pb-3">Capacity</th>
+              <th className="text-center pb-3">Actions</th>
+            </tr>
+          </thead>
+        </table>
+
+        {/* Blue Divider (aligned with table width) */}
+        <div className="h-[3px] w-full bg-[#0077FF] rounded-full shadow-[0px_4px_4px_0px_#00000040]
+" />
       </div>
 
-      {/* Body rows */}
-      <div className="overflow-y-auto custom-scroll" style={{ maxHeight: "calc(293px - 56px)" }}>
-        {/* Loading State */}
+      {/* BODY */}
+      <div
+        className="overflow-y-auto custom-scroll px-8 pr-5 mr-1.5"
+        style={{ maxHeight: "calc(293px - 76px)" }}
+      >
+        {/* Loading */}
         {isLoading && (
-          <div className="flex items-center justify-center py-8 text-[#8A96A8]">
+          <div className="flex items-center justify-center py-10 text-[#8A96A8]">
             Loading classrooms...
           </div>
         )}
 
-        {/* Error State */}
+        {/* Error */}
         {!isLoading && error && (
-          <div className="flex items-center justify-center py-8 text-red-500 text-sm">
+          <div className="flex items-center justify-center py-10 text-red-500 text-sm">
             {error}
           </div>
         )}
 
-        {/* Empty State */}
+        {/* Empty */}
         {!isLoading && !error && filtered.length === 0 && (
-          <div className="flex items-center justify-center py-8 text-[#8A96A8]">
+          <div className="flex items-center justify-center py-10 text-[#8A96A8]">
             {searchQuery ? "No classrooms found" : "No classrooms added yet"}
           </div>
         )}
 
-        {/* Data Rows */}
-        {!isLoading && !error && filtered.map((room, idx) => (
-          <div
-            key={room._id}
-            className={`flex items-center px-8 py-3 text-sm border-b border-[#ECF0F4] ${
-              idx === filtered.length - 1 ? "border-b-0" : ""
-            } hover:bg-[#F7FAFF] transition`}
-          >
-            {editingId === room._id ? (
-              <>
-                {/* Edit Mode - Classroom Name (Read-only) */}
-                <div className="flex-[1.5] text-[#4C5968] leading-snug">{room.name}</div>
+        {/* Table Body */}
+        {!isLoading && !error && filtered.length > 0 && (
+          <table className="w-full table-fixed">
+            <colgroup>
+              <col style={{ width: "25%" }} />
+              <col style={{ width: "25%" }} />
+              <col style={{ width: "25%" }} />
+              <col style={{ width: "25%" }} />
+            </colgroup>
 
-                {/* Edit Mode - Classroom Type */}
-                <div className="flex-[1.5] text-center">
-                  <input
-                    type="text"
-                    value={editData.type}
-                    onChange={(e) => setEditData({ ...editData, type: e.target.value })}
-                    className="w-full px-2 py-1 border border-[#BFBFBF] rounded text-[13px] text-center focus:outline-none focus:ring-1 focus:ring-[#1DA5FF]"
-                    placeholder="e.g., Lab, Lecture Hall"
-                  />
-                </div>
+            <tbody>
+              {filtered.map((room, idx) => (
+                <tr
+                  key={room._id}
+                  className={`text-sm border-b border-[#ECF0F4] hover:bg-[#F7FAFF] transition ${
+                    idx === filtered.length - 1 ? "border-b-0" : ""
+                  }`}
+                >
+                  {/* Classroom Name */}
+                  <td className="py-5 text-center text-[#4C5968]">
+                    {room.name}
+                  </td>
 
-                {/* Edit Mode - Capacity */}
-                <div className="flex-[1] text-center">
-                  <input
-                    type="number"
-                    value={editData.capacity}
-                    onChange={(e) => setEditData({ ...editData, capacity: e.target.value })}
-                    className="w-full px-2 py-1 border border-[#BFBFBF] rounded text-[13px] text-center focus:outline-none focus:ring-1 focus:ring-[#1DA5FF]"
-                    placeholder="Capacity"
-                    min="1"
-                  />
-                </div>
+                  {/* Type */}
+                  <td className="py-5 text-center text-[#8A96A8] capitalize">
+                    {editingId === room._id ? (
+                      <input
+                        type="text"
+                        value={editData.type}
+                        onChange={(e) =>
+                          setEditData({ ...editData, type: e.target.value })
+                        }
+                        className="w-[220px] px-2 py-1 border border-[#BFBFBF] rounded text-[13px] text-center focus:outline-none focus:ring-1 focus:ring-[#1DA5FF]"
+                      />
+                    ) : (
+                      room.type
+                    )}
+                  </td>
 
-                {/* Edit Mode - Save/Cancel Buttons */}
-                <div className="w-20 flex items-center justify-center gap-2">
-                  <button
-                    onClick={handleUpdate}
-                    className="text-[#1A8FE3] hover:text-[#0056b3] text-[12px] font-medium"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={handleCancelEdit}
-                    className="text-[#8A96A8] hover:text-[#4C5968] text-[12px] font-medium"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                {/* View Mode - Classroom Name */}
-                <div className="flex-[1.5] text-[#4C5968] leading-snug">{room.name}</div>
+                  {/* Capacity */}
+                  <td className="py-5 text-center text-[#8A96A8]">
+                    {editingId === room._id ? (
+                      <input
+                        type="number"
+                        min="1"
+                        value={editData.capacity}
+                        onChange={(e) =>
+                          setEditData({ ...editData, capacity: e.target.value })
+                        }
+                        className="w-[110px] px-2 py-1 border border-[#BFBFBF] rounded text-[13px] text-center focus:outline-none focus:ring-1 focus:ring-[#1DA5FF]"
+                      />
+                    ) : (
+                      room.capacity
+                    )}
+                  </td>
 
-                {/* View Mode - Classroom Type */}
-                <div className="flex-[1.5] text-center text-[#8A96A8] capitalize">{room.type}</div>
-
-                {/* View Mode - Capacity */}
-                <div className="flex-[1] text-center text-[#8A96A8]">{room.capacity}</div>
-
-                {/* View Mode - Actions */}
-                <div className="w-20 flex items-center justify-center gap-3">
-                  <button
-                    onClick={() => handleEdit(room)}
-                    className="text-[#C0C6D0] hover:text-[#1A8FE3]"
-                  >
-                    <Edit2 size={15} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(room._id, room.name)}
-                    className="text-[#C0C6D0] hover:text-[#F04438]"
-                  >
-                    <Trash2 size={15} />
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        ))}
+                  {/* Actions */}
+                  <td className="py-5">
+                    {editingId === room._id ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={handleUpdate}
+                          className="text-[#1A8FE3] hover:text-[#0056b3] text-[12px] font-medium"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={handleCancelEdit}
+                          className="text-[#8A96A8] hover:text-[#4C5968] text-[12px] font-medium"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-3">
+                        <button
+                          onClick={() => handleEdit(room)}
+                          className="text-[#C0C6D0] hover:text-[#1A8FE3]"
+                        >
+                          <Edit2 size={15} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(room._id, room.name)}
+                          className="text-[#C0C6D0] hover:text-[#F04438]"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
+      {/* Scrollbar Styling */}
       <style>{`
         .custom-scroll::-webkit-scrollbar {
           width: 9.78px;
@@ -243,3 +276,18 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
