@@ -5,14 +5,21 @@ import { forgotPasswordAPI } from "../../api/api";
 // ✅ shared components
 import { Button } from "../../Components/ui/Button";
 import { InputField } from "../../Components/ui/InputField";
+import { useAlert } from "../../Components/ui/Modal";
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const { showAlert, AlertComponent } = useAlert();
+
   const handleSubmit = async () => {
     if (!email) {
-      alert("Please enter your email");
+      showAlert({
+        title: 'Missing Information',
+        message: 'Please enter your email address',
+        type: 'warning'
+      });
       return;
     }
 
@@ -25,13 +32,25 @@ const ForgotPasswordForm = () => {
       console.log("Forgot Password Response:", response);
 
       if (response.success) {
-        alert("Reset link sent to your email");
+        showAlert({
+          title: 'Success!',
+          message: 'Reset link sent to your email. Please check your inbox.',
+          type: 'success'
+        });
       } else {
-        alert(response.message || "Something went wrong");
+        showAlert({
+          title: 'Error',
+          message: response.message || "Something went wrong",
+          type: 'error'
+        });
       }
     } catch (error) {
       console.error("Forgot Password Error:", error);
-      alert("Server error. Please try again later.");
+      showAlert({
+        title: 'Server Error',
+        message: 'Server error. Please try again later.',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -92,13 +111,10 @@ const ForgotPasswordForm = () => {
           {loading ? "Sending..." : "Send reset link"}
         </Button>
       </div>
+
+      <AlertComponent />
     </>
   );
 };
 
 export default ForgotPasswordForm;
-
-
-
-
-

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { loginAPI } from "../../api/api";
 import { Button } from "../../Components/ui/Button";
 import { InputField } from "../../Components/ui/InputField";
+import { useAlert } from "../ui/Modal";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,10 +13,15 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { showAlert, AlertComponent } = useAlert();
 
   const handleSubmit = async () => {
     if (!email || !password) {
-      alert("Please enter email and password");
+      showAlert({
+        title: 'Missing Information',
+        message: 'Please enter email and password',
+        type: 'warning'
+      });
       return;
     }
     
@@ -24,14 +30,26 @@ const LoginForm = () => {
       const res = await loginAPI(email, password);
 
       if (res.success) {
-        alert("Login successful");
-        navigate("/dashboard");
+        showAlert({
+          title: 'Success!',
+          message: 'Login successful',
+          type: 'success'
+        });
+        setTimeout(() => navigate("/dashboard"), 1500);
       } else {
-        alert(res.message || "Login failed");
+        showAlert({
+          title: 'Login Failed',
+          message: res.message || "Login failed",
+          type: 'error'
+        });
       }
     } catch (error) {
       console.error(error);
-      alert(error.message || "Something went wrong");
+      showAlert({
+        title: 'Error',
+        message: error.message || "Something went wrong",
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -39,15 +57,16 @@ const LoginForm = () => {
 
   return (
     <>
-      <div className="mb-8 text-center">
-        <p className="text-md text-[#4A9FB5] text-left mb-8">Ezey</p>
+      {/* Header - More Compact */}
+      <div className="mb-6 text-center">
+        <p className="text-sm text-[#4A9FB5] text-left mb-4">Ezey</p>
 
         <h1
-          className="mb-3"
+          className="mb-2"
           style={{
             fontFamily: "Georgia, serif",
             fontWeight: 700,
-            fontSize: "28px",
+            fontSize: "24px",
             lineHeight: "120%",
             color: "#265768",
           }}
@@ -55,16 +74,16 @@ const LoginForm = () => {
           Welcome to Ezey
         </h1>
 
-        <p className="text-sm text-[#7A8C94]">
-          Start your experience with Ezey by signing in
+        <p className="text-xs text-[#7A8C94]">
+          Start your experience with Ezey by signing in or signing up
         </p>
-        <p className="text-sm text-[#7A8C94]">or signing up</p>
       </div>
 
-      <div className="mb-4">
+      {/* Email Input - Compact */}
+      <div className="mb-3">
         <InputField
-          width="450px"
-          height="42px"
+          width="100%"
+          height="40px"
           label="Email Address / Institution Id"
           type="text"
           value={email}
@@ -74,10 +93,11 @@ const LoginForm = () => {
         />
       </div>
 
-      <div className="mb-2 mt-3">
+      {/* Password Input - Compact */}
+      <div className="mb-3">
         <InputField
-          width="450px"
-          height="42px"
+          width="100%"
+          height="40px"
           label="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -89,7 +109,8 @@ const LoginForm = () => {
         />
       </div>
 
-      <div className="flex justify-center mb-6 mt-15">
+      {/* Sign In Button - Compact */}
+      <div className="flex justify-center mb-4 mt-6">
         <Button
           variant="primary"
           onClick={handleSubmit}
@@ -98,12 +119,10 @@ const LoginForm = () => {
           {loading ? "Signing In..." : "Sign In"}
         </Button>
       </div>
+
+      <AlertComponent />
     </>
   );
 };
 
 export default LoginForm;
-
-
-
-

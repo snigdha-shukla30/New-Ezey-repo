@@ -67,16 +67,16 @@ export const emailVerificationAPI = async (token) => {
 export const dashboardSummaryAPI = async () => {
   const res = await fetch(`${BASE_URL}/dashboard/summary`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: tokenManager.getAuthHeader(),  // ⭐ USE TOKEN MANAGER
     credentials: "include",
   });
 
   if (!res.ok) {
-    handleUnauthorized(res);
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || `API Error: ${res.status}`);
+    if (res.status === 401) {
+      tokenManager.clearTokens();  // ⭐ CLEAR ON UNAUTHORIZED
+      window.location.href = '/login';
+    }
+    throw new Error(`API Error: ${res.status}`);
   }
 
   return res.json();

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Mail } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
-
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 import { Button } from "../../Components/ui/Button";
 import { InputField } from "../../Components/ui/InputField";
-
+import { useAlert } from "../../Components/ui/Modal";
 
 import { emailVerificationAPI } from "../../api/api";
 
@@ -13,13 +12,19 @@ const EmailVerificationForm = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const token = searchParams.get("token");
+
+  const { showAlert, AlertComponent } = useAlert();
 
   const handleSubmit = async () => {
     if (!token) {
-      alert("Invalid or missing verification token");
+      showAlert({
+        title: 'Invalid Token',
+        message: 'Invalid or missing verification token',
+        type: 'error'
+      });
       return;
     }
 
@@ -29,13 +34,26 @@ const EmailVerificationForm = () => {
       const res = await emailVerificationAPI(token);
 
       if (res.success) {
-        alert("Email verified successfully");
+        showAlert({
+          title: 'Success!',
+          message: 'Email verified successfully',
+          type: 'success'
+        });
+        setTimeout(() => navigate("/verified"), 2000);
       } else {
-        alert(res.message || "Verification failed");
+        showAlert({
+          title: 'Verification Failed',
+          message: res.message || "Verification failed",
+          type: 'error'
+        });
       }
     } catch (error) {
       console.error(error);
-      alert("Something went wrong");
+      showAlert({
+        title: 'Error',
+        message: 'Something went wrong. Please try again.',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -97,12 +115,10 @@ const EmailVerificationForm = () => {
           {loading ? "Verifying..." : "Resend Link"}
         </Button>
       </div>
+
+      <AlertComponent />
     </>
   );
 };
 
 export default EmailVerificationForm;
-
-
-
-

@@ -4,22 +4,37 @@ import LoginForm from "../../Components/auth/LoginForm";
 
 const EzeyLoginPage = () => {
   return (
-    <div className="min-h-screen bg-[#F5F5F5] flex items-center justify-center px-6">
-      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8">
-        <LeftAuthLayout>
-          <LoginForm />
-        </LeftAuthLayout>
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#F5F5F5', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      padding: '20px'
+    }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '30px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        maxWidth: '1200px',
+        width: '100%'
+      }}>
+        {/* Left Side - Login Form */}
+        <div style={{ flexShrink: 0 }}>
+          <LeftAuthLayout>
+            <LoginForm />
+          </LeftAuthLayout>
+        </div>
 
-        <RightAuthSlider />
+        {/* Right Side - Banner */}
+        <div style={{ flexShrink: 0 }}>
+          <RightAuthSlider />
+        </div>
       </div>
     </div>
   );
 };
 
 export default EzeyLoginPage;
-
-
-
-
-
-

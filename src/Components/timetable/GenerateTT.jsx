@@ -4,6 +4,7 @@ import { generateTimetable } from "../../api/api";
 import { CardContainer } from "../../Components/ui/Card";
 import { Button } from "../../Components/ui/Button";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "../../Components/ui/Modal";
 
 /* Dummy batch options (later API se replace ho sakta hai) */
 const batchOptions = [
@@ -21,9 +22,15 @@ export default function GenerateTT() {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
+  const { showAlert, AlertComponent } = useAlert();
+
   const handleGenerate = async () => {
     if (!batchId) {
-      alert("Please enter Batch ID");
+      showAlert({
+        title: 'Missing Information',
+        message: 'Please enter Batch ID',
+        type: 'warning'
+      });
       return;
     }
 
@@ -36,18 +43,34 @@ export default function GenerateTT() {
           batchInfo: res.batchInfo,
           option: res.options[0],
         });
+        showAlert({
+          title: 'Success!',
+          message: 'Timetable generated successfully',
+          type: 'success'
+        });
+      } else {
+        showAlert({
+          title: 'Generation Failed',
+          message: 'No timetable options found for this batch',
+          type: 'error'
+        });
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to generate timetable");
+      showAlert({
+        title: 'Error',
+        message: err.message || 'Failed to generate timetable',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handlePreview = () => {
-  navigate(`/timetable/preview/${batchId}`);
-};
+    navigate(`/timetable/preview/${batchId}`);
+  };
+
   return (
     <CardContainer>
       {/* ===== Header (Dashboard-style) ===== */}
@@ -299,8 +322,8 @@ export default function GenerateTT() {
          
         </>
       )}
+
+      <AlertComponent />
     </CardContainer>
   );
 }
-
-

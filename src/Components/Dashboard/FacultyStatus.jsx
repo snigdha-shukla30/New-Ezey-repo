@@ -13,7 +13,7 @@ const FacultyStatus = () => {
 
   return (
     <div 
-      className="bg-white rounded-[10px] border border-[#CACACA] shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+  className="rounded-[10px] border border-[#E5E7EB] faculty-scrollbar overflow-y-auto"
       style={{
         width: '340px',
         height: '391px',

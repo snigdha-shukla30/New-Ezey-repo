@@ -4,20 +4,37 @@ import SignupForm from "../../Components/auth/SignupForm";
 
 const EzeySignupPage = () => {
   return (
-    <div className="min-h-screen bg-[#F5F5F5] flex items-center justify-center px-6">
-      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8">
-        <LeftAuthLayout>
-          <SignupForm />
-        </LeftAuthLayout>
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#F5F5F5', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      padding: '20px'
+    }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '30px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        maxWidth: '1200px',
+        width: '100%'
+      }}>
+        {/* Left Side - Signup Form */}
+        <div style={{ flexShrink: 0 }}>
+          <LeftAuthLayout>
+            <SignupForm />
+          </LeftAuthLayout>
+        </div>
 
-        <RightAuthSlider />
+        {/* Right Side - Banner */}
+        <div style={{ flexShrink: 0 }}>
+          <RightAuthSlider />
+        </div>
       </div>
     </div>
   );
 };
 
 export default EzeySignupPage;
-
-
-
-

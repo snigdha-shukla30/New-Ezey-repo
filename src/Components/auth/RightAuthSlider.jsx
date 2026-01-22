@@ -24,7 +24,7 @@ const RightAuthSlider = () => {
 
   return (
     <div
-      className="relative w-full h-[650px] mt-4 rounded-2xl overflow-hidden shadow-xl flex items-center justify-center"
+      className="relative w-full max-w-[600px] h-[650px] rounded-2xl overflow-hidden shadow-xl flex items-center justify-center"
       style={{
         backgroundImage: "url('/rightbg.jpg')",
         backgroundSize: "cover",
@@ -40,22 +40,22 @@ const RightAuthSlider = () => {
             currentSlide === index ? "opacity-100" : "opacity-0"
           }`}
         >
-          <div className="relative w-[360px] h-[400px] mb-8">
+          <div className="relative w-[280px] h-[320px] mb-6">
             {index === 0 && (
               <>
                 <img
                   src="/spects.jpg"
-                  className="absolute top-0 right-10 w-44 h-44 rounded-2xl border-8 border-[#599BAB]/50 object-cover"
+                  className="absolute top-0 right-8 w-32 h-32 rounded-2xl border-4 border-[#599BAB]/50 object-cover shadow-lg"
                 />
 
                 <img
                   src="/watch.jpg"
-                  className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-44 rounded-2xl border-8 border-[#599BAB]/50 object-cover"
+                  className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-2xl border-4 border-[#599BAB]/50 object-cover shadow-lg z-10"
                 />
 
                 <img
                   src="/copy.jpg"
-                  className="absolute bottom-0 left-6 w-44 h-44 rounded-2xl border-8 border-[#599BAB]/50 object-cover"
+                  className="absolute bottom-0 left-6 w-32 h-32 rounded-2xl border-4 border-[#599BAB]/50 object-cover shadow-lg"
                 />
               </>
             )}
@@ -63,12 +63,12 @@ const RightAuthSlider = () => {
             {index !== 0 && (
               <img
                 src={index === 1 ? "/ezeyteam.jpg" : "/timer.jpg"}
-                className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-2xl border-8 border-[#599BAB]/50 object-cover"
+                className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-2xl border-4 border-[#599BAB]/50 object-cover shadow-lg"
               />
             )}
           </div>
 
-          <p className="text-white text-xl text-center max-w-md px-6">
+          <p className="text-white text-base text-center max-w-sm px-8 leading-relaxed">
             "{slide.text}"
           </p>
         </div>
@@ -90,6 +90,3 @@ const RightAuthSlider = () => {
 };
 
 export default RightAuthSlider;
-
-
-

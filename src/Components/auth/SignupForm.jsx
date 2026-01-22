@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { signupAPI } from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
-// ✅ shared components
 import { Button } from "../../Components/ui/Button";
 import { InputField } from "../../Components/ui/InputField";
+import { useAlert } from "../ui/Modal";
 
 const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,14 +18,25 @@ const SignupForm = () => {
   const [accountType, setAccountType] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+  const { showAlert, AlertComponent } = useAlert();
+
   const handleSubmit = async () => {
     if (!name || !email || !password || !confirmPassword || !accountType) {
-      alert("Please fill all required fields");
+      showAlert({
+        title: 'Missing Information',
+        message: 'Please fill all required fields',
+        type: 'warning'
+      });
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      showAlert({
+        title: 'Password Mismatch',
+        message: 'Passwords do not match',
+        type: 'error'
+      });
       return;
     }
 
@@ -38,13 +50,26 @@ const SignupForm = () => {
       });
 
       if (res.success) {
-        alert("Signup successful");
+        showAlert({
+          title: 'Success!',
+          message: 'Signup successful. Please check your email for verification.',
+          type: 'success'
+        });
+        setTimeout(() => navigate("/verification"), 2000);
       } else {
-        alert(res.message || "Signup failed");
+        showAlert({
+          title: 'Signup Failed',
+          message: res.message || "Signup failed",
+          type: 'error'
+        });
       }
     } catch (error) {
       console.error(error);
-      alert("Something went wrong");
+      showAlert({
+        title: 'Error',
+        message: 'Something went wrong. Please try again.',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -52,15 +77,16 @@ const SignupForm = () => {
 
   return (
     <>
+      {/* Header - Compact */}
       <div className="mb-4 text-center">
-        <p className="text-md text-[#4A9FB5] text-left mb-4">Ezey</p>
+        <p className="text-sm text-[#4A9FB5] text-left mb-3">Ezey</p>
 
         <h1
           className="mb-2"
           style={{
             fontFamily: "Georgia, serif",
             fontWeight: 700,
-            fontSize: "28px",
+            fontSize: "22px",
             lineHeight: "120%",
             color: "#265768",
           }}
@@ -68,17 +94,16 @@ const SignupForm = () => {
           Welcome to Ezey
         </h1>
 
-        <p className="text-[14px] text-[#7A8C94]">
-          Start your experience with Ezey by signing in
+        <p className="text-xs text-[#7A8C94]">
+          Start your experience with Ezey by signing up
         </p>
-        <p className="text-[14px] text-[#7A8C94]">or signing up</p>
       </div>
 
-      
+      {/* Full Name - Compact */}
       <div className="mb-2">
         <InputField
-          width="450px"
-          height="42px"
+          width="100%"
+          height="38px"
           label="Full Name*"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -87,11 +112,11 @@ const SignupForm = () => {
         />
       </div>
 
-     
+      {/* Email - Compact */}
       <div className="mb-2">
         <InputField
-          width="450px"
-          height="42px"
+          width="100%"
+          height="38px"
           label="Email Address / Institution Id"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -100,11 +125,11 @@ const SignupForm = () => {
         />
       </div>
 
-   
+      {/* Password - Compact */}
       <div className="mb-2">
         <InputField
-          width="450px"
-          height="42px"
+          width="100%"
+          height="38px"
           label="Create Password*"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -116,11 +141,11 @@ const SignupForm = () => {
         />
       </div>
 
-    
-      <div className="mb-4">
+      {/* Confirm Password - Compact */}
+      <div className="mb-2">
         <InputField
-          width="450px"
-          height="42px"
+          width="100%"
+          height="38px"
           label="Re-Enter Password*"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
@@ -128,20 +153,18 @@ const SignupForm = () => {
           icon={Lock}
           showPasswordToggle
           showPassword={showConfirmPassword}
-          onTogglePassword={() =>
-            setShowConfirmPassword(!showConfirmPassword)
-          }
+          onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
         />
       </div>
 
-     
-      <div className="mb-6 ml-33">
-        <div className="relative w-[160px]">
+      {/* Account Type - Compact */}
+      <div className="mb-4">
+        <div className="relative w-full">
           <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A0AEC0] w-4 h-4" />
           <select
             value={accountType}
             onChange={(e) => setAccountType(e.target.value)}
-            className="w-full h-[40px] pl-10 pr-5 rounded-[10px] border-[1.5px] border-[#DFDFDF] text-[13px] text-[#7A8C94]"
+            className="w-full h-[38px] pl-10 pr-5 rounded-[10px] border-[1.5px] border-[#DFDFDF] text-xs text-[#7A8C94]"
           >
             <option value="">Account Type</option>
             <option value="student">Student</option>
@@ -151,8 +174,8 @@ const SignupForm = () => {
         </div>
       </div>
 
-      
-      <div className="flex justify-center mb-4">
+      {/* Sign Up Button */}
+      <div className="flex justify-center mb-3">
         <Button
           variant="primary"
           onClick={handleSubmit}
@@ -162,18 +185,20 @@ const SignupForm = () => {
         </Button>
       </div>
 
-      
-      <p className="text-center text-[12px] text-[#7A8C94] mb-4">
+      {/* Sign In Link */}
+      <p className="text-center text-xs text-[#7A8C94] mb-2">
         Already a user ?{" "}
-        <span className="text-[#4BACCE] cursor-pointer">
+        <span 
+          className="text-[#4BACCE] cursor-pointer hover:underline"
+          onClick={() => navigate("/login")}
+        >
           Sign In
         </span>
       </p>
+
+      <AlertComponent />
     </>
   );
 };
 
 export default SignupForm;
-
-
-
