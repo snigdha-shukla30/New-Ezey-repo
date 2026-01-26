@@ -9,7 +9,7 @@ export const Button = ({
 
   const variants = {
     primary: `
-      w-[371px]
+      w-full max-w-[371px]
       h-[42px]
       rounded-[6px]
       bg-[linear-gradient(0deg,#265768_0%,#4BACCE_100%)]

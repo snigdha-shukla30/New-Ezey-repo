@@ -9,8 +9,8 @@ import { InputField } from "../../Components/ui/InputField";
 
 import { emailVerificationAPI } from "../../api/api";
 
-const EmailVerificationForm = () => {
-  const [email, setEmail] = useState("");
+const EmailVerificationForm = ({ initialEmail = "" }) => {
+  const [email, setEmail] = useState(initialEmail);
   const [loading, setLoading] = useState(false);
 
 
@@ -43,7 +43,7 @@ const EmailVerificationForm = () => {
 
   return (
     <>
-     
+
       <div className="mb-8 text-center">
         <p className="text-md text-[#4A9FB5] text-left mb-8">Ezey</p>
 
@@ -74,7 +74,7 @@ const EmailVerificationForm = () => {
         </p>
       </div>
 
-      
+
       <div className="mb-10">
         <InputField
           width="450px"
@@ -87,7 +87,7 @@ const EmailVerificationForm = () => {
         />
       </div>
 
-      
+
       <div className="flex justify-center mb-6">
         <Button
           variant="primary"
