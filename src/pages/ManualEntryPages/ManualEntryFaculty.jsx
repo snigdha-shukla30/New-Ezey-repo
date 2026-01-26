@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Edit2, Trash2, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import nodata from "../../assets/images/nodataa.png";
 import {
   getFaculties,
   addFaculty,
@@ -14,16 +15,13 @@ const Component = ({ property1, className, headingClassName, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`bg-[linear-gradient(0deg,rgba(38,87,104,1)_0%,rgba(75,172,206,1)_100%)] w-52 left-2.5 h-10 overflow-hidden rounded-md relative ${
-        property1 === "variant-12" ? "top-[214px]" : "top-[146px]"
-      } ${property1 === "variant-12" ? "shadow-[0px_4px_4px_#00000040]" : ""} ${
-        className || ""
-      }`}
+      className={`bg-[linear-gradient(0deg,rgba(38,87,104,1)_0%,rgba(75,172,206,1)_100%)] w-52 left-2.5 h-10 overflow-hidden rounded-md relative ${property1 === "variant-12" ? "top-[214px]" : "top-[146px]"
+        } ${property1 === "variant-12" ? "shadow-[0px_4px_4px_#00000040]" : ""} ${className || ""
+        }`}
     >
       <p
-        className={`[font-family:'Mulish',Helvetica] left-2 tracking-[0] text-base top-[11px] text-white font-medium text-center whitespace-nowrap leading-[19.2px] absolute ${
-          headingClassName || ""
-        }`}
+        className={`[font-family:'Mulish',Helvetica] left-2 tracking-[0] text-base top-[11px] text-white font-medium text-center whitespace-nowrap leading-[19.2px] absolute ${headingClassName || ""
+          }`}
       >
         Upload File ( CSV / XLSX )
       </p>
@@ -360,48 +358,55 @@ export const ManualEntryFaculty = () => {
             borderColor: "#e8e8e8",
           }}
         >
-          {/* ✅ TOP RIGHT CROSS BUTTON */}
-          <button
-            type="button"
-            onClick={() => navigate("/form")}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition z-50"
-            aria-label="Close"
-          >
-            <X size={20} color="#265768" />
-          </button>
-
-          {/* Hidden file input */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".csv,.xlsx,.xls"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-
-          <div className="px-6 pt-6">
-            {/* Header */}
-            <div className="mb-3 relative">
+          <div className="px-6 pt-4 pb-4">
+            {/* HEADER (Row 1: Logo + Close) */}
+            <div className="flex justify-between items-start mb-6">
               <div
                 className="text-3xl font-['Playfair_Display'] font-bold text-[#6b6b6b]"
-                style={{
-                  textShadow: "0px 6px 6px rgba(0, 0, 0, 0.25)",
-                }}
+                style={{ textShadow: "0px 6px 6px rgba(0, 0, 0, 0.25)" }}
               >
                 Ezey
               </div>
-
-              {/* buttons */}
-              <div
-                style={{
-                  position: "absolute",
-                  right: 24,
-                  top: 40,
-                  display: "flex",
-                  gap: "12px",
-                  alignItems: "center",
-                }}
+              <button
+                type="button"
+                onClick={() => navigate("/form")}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition"
+                aria-label="Close"
               >
+                <X size={28} color="#265768" strokeWidth={3} />
+              </button>
+            </div>
+
+            {/* TITLE ROW (Row 2: Title + Upload) */}
+            <div className="flex justify-between items-end mb-3">
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-[20px] h-[20px]"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#265768"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <h2 className="text-xl font-['Playfair_Display'] font-semibold text-[#265768]">
+                  Quick add Faculty
+                </h2>
+              </div>
+
+              <div>
+                {/* Hidden file input */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv,.xlsx,.xls"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+
                 <button
                   onClick={handleUploadClick}
                   disabled={uploading}
@@ -422,53 +427,10 @@ export const ManualEntryFaculty = () => {
                 >
                   {uploading ? "Uploading..." : "Upload File ( CSV / XLSX )"}
                 </button>
-
-                {/* <button
-                  onClick={handleAddFaculty}
-                  disabled={loading}
-                  style={{
-                    minWidth: 170,
-                    height: 34,
-                    background: "#ffffff",
-                    borderRadius: 6,
-                    color: "#265768",
-                    fontSize: 12,
-                    fontFamily: "'Mulish', sans-serif",
-                    border: "1px solid #4BACCE",
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.06)",
-                    opacity: loading ? 0.7 : 1,
-                    cursor: loading ? "not-allowed" : "pointer",
-                    padding: "0 14px",
-                  }}
-                >
-                  {loading
-                    ? "Processing..."
-                    : editingId
-                    ? "Update Faculty"
-                    : "Add Faculty"}
-                </button> */}
               </div>
             </div>
 
-            {/* title */}
-            <div className="flex items-center gap-2 mt-2 mb-3">
-              <svg
-                className="w-[24px] h-[24px]"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#265768"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
 
-              <h2 className="text-xl font-['Playfair_Display'] font-semibold text-[#265768]">
-                Quick add Faculty
-              </h2>
-            </div>
 
             {/* blue line */}
             <div
@@ -594,8 +556,8 @@ export const ManualEntryFaculty = () => {
                       {loading
                         ? "Processing..."
                         : editingId
-                        ? "+ Update faculty"
-                        : "+ Add faculty"}
+                          ? "+ Update faculty"
+                          : "+ Add faculty"}
                     </button>
                   </div>
                 </div>
@@ -652,17 +614,33 @@ export const ManualEntryFaculty = () => {
               />
             ) : (
               <div
-                className="mt-6 border rounded-lg flex justify-center items-center"
-                style={{ height: "320px", borderColor: "#DFDFDF" }}
+                className="mt-4 border rounded-lg flex flex-col justify-center items-center gap-1 px-4"
+                style={{ height: "380px", borderColor: "#DFDFDF" }}
               >
-                <div
-                  className="text-[32px] font-['Playfair_Display'] font-bold text-[#aeadad]"
-                  style={{ fontFamily: "Playfair Display, serif" }}
-                >
-                  {loading ? "Loading..." : "No Data !"}
-                </div>
+                {loading ? (
+                  <div
+                    className="text-[24px] font-['Playfair_Display'] font-bold text-[#aeadad]"
+                    style={{ fontFamily: "Playfair Display, serif" }}
+                  >
+                    Loading...
+                  </div>
+                ) : (
+                  <>
+                    <img
+                      src={nodata}
+                      alt="No Data"
+                      className="w-full max-w-[380px] h-auto object-contain mt-2 mb-[-10px]"
+                    />
+                    <div
+                      className="text-[24px] font-['Playfair_Display'] font-bold text-[#aeadad]"
+                      style={{ fontFamily: "Playfair Display, serif" }}
+                    >
+                      No Data !
+                    </div>
+                  </>
+                )}
               </div>
-              
+
             )}
           </div>
           <style>{`

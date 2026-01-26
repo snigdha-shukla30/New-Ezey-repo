@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Edit2, Trash2, X, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // ✅ added
 import '../../custom-scrollbar.css';
+import noDataImage from '../../assets/images/nodataa.png';
 
 
 
@@ -93,7 +94,9 @@ const bulkUploadClassrooms = async (file) => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const res = await fetch(`${BASE_URL}/classrooms/bulk-upload`, {
+  console.log("📤 Uploading file:", file.name);
+
+  const res = await fetch(`${BASE_URL}/api/classrooms/bulk-upload`, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -113,16 +116,13 @@ const Component = ({ property1, className, headingClassName, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`bg-[linear-gradient(0deg,rgba(38,87,104,1)_0%,rgba(75,172,206,1)_100%)] w-52 left-2.5 h-10 overflow-hidden rounded-md relative ${
-        property1 === "variant-12" ? "top-[260px]" : "top-[186px]"
-      } ${property1 === "variant-12" ? "shadow-[0px_4px_4px_#00000040]" : ""} ${
-        className || ""
-      }`}
+      className={`bg-[linear-gradient(0deg,rgba(38,87,104,1)_0%,rgba(75,172,206,1)_100%)] w-52 left-2.5 h-10 overflow-hidden rounded-md relative ${property1 === "variant-12" ? "top-[260px]" : "top-[186px]"
+        } ${property1 === "variant-12" ? "shadow-[0px_4px_4px_#00000040]" : ""} ${className || ""
+        }`}
     >
       <p
-        className={`font-['Mulish',Helvetica] left-2 tracking-[0] text-base top-[11px] text-white font-medium text-center whitespace-nowrap leading-[19.2px] absolute ${
-          headingClassName || ""
-        }`}
+        className={`font-['Mulish',Helvetica] left-2 tracking-[0] text-base top-[11px] text-white font-medium text-center whitespace-nowrap leading-[19.2px] absolute ${headingClassName || ""
+          }`}
       >
         Upload File ( CSV / XLSX )
       </p>
@@ -207,9 +207,8 @@ const ClassroomData = ({ classrooms, onEdit, onDelete, searchQuery }) => {
             {filtered.map((room, idx) => (
               <div
                 key={room._id || idx}
-                className={`flex items-center py-3.5 hover:bg-gray-50 transition ${
-                  idx === filtered.length - 1 ? "border-b-0" : ""
-                }`}
+                className={`flex items-center py-3.5 hover:bg-gray-50 transition ${idx === filtered.length - 1 ? "border-b-0" : ""
+                  }`}
                 style={{ borderBottom: "3px solid #D9D9D9" }}
               >
                 {editingId === room._id ? (
@@ -303,7 +302,7 @@ const ClassroomData = ({ classrooms, onEdit, onDelete, searchQuery }) => {
           </div>
         </div>
 
- 
+
       </div>
     </div>
   );
@@ -385,7 +384,7 @@ export const ManualEntryClassroom = () => {
 
       if (response.success) {
         await fetchClassrooms();
-        
+
       }
     } catch (err) {
       alert("Failed to delete classroom: " + err.message);
@@ -440,6 +439,7 @@ export const ManualEntryClassroom = () => {
 
     try {
       setUploading(true);
+      setError("");
       const response = await bulkUploadClassrooms(file);
 
       if (response.success) {
@@ -457,27 +457,17 @@ export const ManualEntryClassroom = () => {
   };
 
   return (
-    <div className=" overflow-hidden bg-[#F3F6FB]">
-      <div className="w-full">
+    <div className="h-screen overflow-hidden bg-[#F3F6FB]">
+      <div className="w-full h-full pb-0">
         <div
-          className="bg-white rounded-[10px] shadow-sm border relative w-full"
+          className="bg-white rounded-[10px] shadow-sm border relative w-full h-full"
           style={{
             borderColor: "#e8e8e8",
           }}
         >
-          {/* ✅ TOP RIGHT CROSS BUTTON */}
-          <button
-            type="button"
-            onClick={() => navigate("/form")}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition z-50"
-            aria-label="Close"
-          >
-            <X size={20} color="#265768" />
-          </button>
-
-          <div className="px-6 pt-6">
+          <div className="px-6 pt-4 pb-4">
             {/* Header */}
-            <div className="mb-3 relative">
+            <div className="flex justify-between items-start mb-6">
               <div
                 className="text-3xl font-['Playfair_Display'] font-bold text-[#6b6b6b]"
                 style={{
@@ -486,123 +476,89 @@ export const ManualEntryClassroom = () => {
               >
                 Ezey
               </div>
-
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".csv,.xlsx,.xls"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-
-              {/* ✅ Upload button thoda niche shifted */}
               <button
-                onClick={handleUploadClick}
-                disabled={uploading}
-                style={{
-                  position: "absolute",
-                  right: 24,
-                  top: 40, // ✅ SHIFTED NICHE (was 0)
-                  minWidth: 170,
-                  height: 34,
-                  background: "linear-gradient(0deg, #265768 0%, #4BACCE 100%)",
-                  borderRadius: 6,
-                  color: "white",
-                  fontSize: 12,
-                  fontFamily: "'Mulish', sans-serif",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.12)",
-                  opacity: uploading ? 0.7 : 1,
-                  cursor: uploading ? "not-allowed" : "pointer",
-                  padding: "0 14px",
-                }}
+                type="button"
+                onClick={() => navigate("/form")}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition"
+                aria-label="Close"
               >
-                {uploading ? "Uploading..." : "Upload File ( CSV / XLSX )"}
+                <X size={28} color="#265768" strokeWidth={3} />
               </button>
             </div>
 
-            {/* Title */}
-            <div className="flex items-center gap-2 mt-2 mb-3">
-              <img
-                className="w-[24px] h-[24px]"
-                alt="Classroom icon"
-                src="https://c.animaapp.com/mjlb1n9pyRcYDw/img/arcticons-classroom.svg"
-              />
-              <h2 className="text-xl font-['Playfair_Display'] font-semibold text-[#265768]">
-                Quick add classroom
-              </h2>
+            <div className="flex justify-between items-end mb-3">
+              {/* Title */}
+              <div className="flex items-center gap-2">
+                <img
+                  className="w-[24px] h-[24px]"
+                  alt="Classroom icon"
+                  src="https://c.animaapp.com/mjlb1n9pyRcYDw/img/arcticons-classroom.svg"
+                />
+                <h2 className="text-xl font-['Playfair_Display'] font-semibold text-[#265768]">
+                  Quick add classroom
+                </h2>
+              </div>
+
+              {/* Upload Button */}
+              <div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv,.xlsx,.xls"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <button
+                  onClick={handleUploadClick}
+                  disabled={uploading}
+                  style={{
+                    minWidth: 170,
+                    height: 34,
+                    background: "linear-gradient(0deg, #265768 0%, #4BACCE 100%)",
+                    borderRadius: 6,
+                    color: "white",
+                    fontSize: 12,
+                    fontFamily: "'Mulish', sans-serif",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.12)",
+                    opacity: uploading ? 0.7 : 1,
+                    cursor: uploading ? "not-allowed" : "pointer",
+                    padding: "0 14px",
+                  }}
+                >
+                  {uploading ? "Uploading..." : "Upload File ( CSV / XLSX )"}
+                </button>
+              </div>
             </div>
 
             <div
-              className="w-full h-[3px] bg-[#0b84d6] rounded"
+              className="h-[3px] bg-[#0b84d6] rounded w-[calc(100%+48px)] -mx-6"
               style={{ boxShadow: "0px 4px 4px 0px rgba(0,0,0,0.25)" }}
             />
 
             {/* FORM */}
             <div className="mt-6">
-              <div className="grid grid-cols-12 gap-x-2 gap-y-6 mr-8">
-                <div className="col-span-3">
-                  <div
-                    className="text-xs mb-1"
-                    style={{
-                      color: "#265768",
-                      fontFamily: "'Mulish', sans-serif",
-                      fontSize: "14px",
-                    }}
-                  >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-x-4 gap-y-6 mr-0 lg:mr-8">
+                <div className="lg:col-span-3">
+                  <div className="text-[#265768] font-['Mulish'] text-[14px] mb-1">
                     Enter classroom number
                   </div>
-
                   <input
                     type="text"
                     value={classroomNumber}
                     onChange={(e) => setClassroomNumber(e.target.value)}
                     placeholder="e.g. B-210"
-                    style={{
-                      width: "274.5px",
-                      height: "40px",
-                      borderRadius: "15px",
-                      border: "1.5px solid #DFDFDF",
-                      fontSize: "14px",
-                      fontFamily: "'Mulish', sans-serif",
-                      color: "#000000",
-                      background: "#FFFFFF",
-                      padding: "0 12px",
-                      boxSizing: "border-box",
-                    }}
-                    className="custom-input"
-
+                    className="w-full h-[40px] rounded-[15px] border-[1.5px] border-[#DFDFDF] px-3 text-[14px] font-['Mulish'] text-black bg-white focus:outline-none focus:border-[#4BACCE]"
                   />
                 </div>
 
-                <div className="col-span-3">
-                  <div
-                    className="text-xs mb-1"
-                    style={{
-                      color: "#265768",
-                      fontFamily: "'Mulish', sans-serif",
-                      fontSize: "14px",
-                    }}
-                  >
+                <div className="lg:col-span-3">
+                  <div className="text-[#265768] font-['Mulish'] text-[14px] mb-1">
                     Classroom type
                   </div>
-
                   <select
                     value={classroomType}
                     onChange={(e) => setClassroomType(e.target.value)}
-                    style={{
-                      width: "274.5px",
-                      height: "40px",
-                      borderRadius: "15px",
-                      border: "1.5px solid #DFDFDF",
-                      fontSize: "14px",
-                      fontFamily: "'Mulish', sans-serif",
-                      color: "#000000",
-                      background: "#FFFFFF",
-                      padding: "0 12px",
-                      boxSizing: "border-box",
-                    }}
-                    className="custom-input"
-
+                    className="w-full h-[40px] rounded-[15px] border-[1.5px] border-[#DFDFDF] px-3 text-[14px] font-['Mulish'] text-black bg-white focus:outline-none focus:border-[#4BACCE]"
                   >
                     <option value="lecture">Lecture Hall</option>
                     <option value="lab">Computer Lab</option>
@@ -610,57 +566,25 @@ export const ManualEntryClassroom = () => {
                   </select>
                 </div>
 
-                <div className="col-span-3">
-                  <div
-                    className="text-xs mb-1"
-                    style={{
-                      color: "#265768",
-                      fontFamily: "'Mulish', sans-serif",
-                      fontSize: "14px",
-                    }}
-                  >
+                <div className="lg:col-span-3">
+                  <div className="text-[#265768] font-['Mulish'] text-[14px] mb-1">
                     Classroom capacity
                   </div>
-
                   <input
                     type="number"
                     value={classroomCapacity}
                     onChange={(e) => setClassroomCapacity(e.target.value)}
                     placeholder="e.g. 45"
-                    style={{
-                      width: "274.5px",
-                      height: "40px",
-                      borderRadius: "15px",
-                      border: "1.5px solid #DFDFDF",
-                      fontSize: "14px",
-                      fontFamily: "'Mulish', sans-serif",
-                      color: "#000000",
-                      background: "#FFFFFF",
-                      padding: "0 12px",
-                      boxSizing: "border-box",
-                    }}
-                    className="custom-input"
-
+                    className="w-full h-[40px] rounded-[15px] border-[1.5px] border-[#DFDFDF] px-3 text-[14px] font-['Mulish'] text-black bg-white focus:outline-none focus:border-[#4BACCE]"
                   />
                 </div>
 
-                {/* small add button */}
-                <div className="col-span-3 flex items-end justify-end">
+                {/* Add Button */}
+                <div className="lg:col-span-3 flex items-end justify-start lg:justify-end">
                   <button
                     onClick={handleAddClassroom}
                     disabled={loading}
-                    style={{
-                      fontSize: "12px",
-                      color: "rgb(77, 172, 206)",
-                      background: "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                      fontFamily: "'Mulish', sans-serif",
-                      position: "relative",
-                      top: "6px",
-                      whiteSpace: "nowrap",
-                      opacity: loading ? 0.6 : 1,
-                    }}
+                    className="h-[40px] flex items-center text-[12px] font-['Mulish'] text-[#9CA3AF] hover:text-[#4BACCE] whitespace-nowrap transition-colors"
                   >
                     {loading ? "Adding..." : "+ Add classroom"}
                   </button>
@@ -672,9 +596,8 @@ export const ManualEntryClassroom = () => {
 
             {(error || uploading) && (
               <div
-                className={`mt-3 text-center text-sm font-medium ${
-                  error ? "text-red-500" : "text-blue-500"
-                }`}
+                className={`mt-3 text-center text-sm font-medium ${error ? "text-red-500" : "text-blue-500"
+                  }`}
               >
                 {uploading ? "Uploading file..." : error}
               </div>
@@ -690,11 +613,16 @@ export const ManualEntryClassroom = () => {
               />
             ) : (
               <div
-                className="mt-6 border rounded-lg flex justify-center items-center"
-                style={{ height: "320px", borderColor: "#DFDFDF" }}
+                className="mt-4 border rounded-lg flex flex-col justify-center items-center gap-1 px-4"
+                style={{ height: "450px", borderColor: "#DFDFDF" }}
               >
+                <img
+                  src={noDataImage}
+                  alt="No Data"
+                  className="w-full max-w-[380px] h-auto object-contain mt-2 mb-[-10px]"
+                />
                 <div
-                  className="text-[32px] font-['Playfair_Display'] font-bold text-[#aeadad]"
+                  className="text-[24px] font-['Playfair_Display'] font-bold text-[#aeadad]"
                   style={{ fontFamily: "Playfair Display, serif" }}
                 >
                   No Data !
@@ -704,8 +632,8 @@ export const ManualEntryClassroom = () => {
           </div>
         </div>
       </div>
-      
-    </div>
+
+    </div >
   );
 };
 

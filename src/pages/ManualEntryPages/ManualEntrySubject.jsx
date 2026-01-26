@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Edit2, Trash2, X } from "lucide-react";
-import nodata from "../../assets/images/nodata.jpeg";
+import nodata from "../../assets/images/nodataa.png";
 import { useNavigate } from "react-router-dom";
 
 // =============================
@@ -263,79 +263,75 @@ export default function ManualEntrySubject() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3F6FB]">
-      <div className="w-full">
+    <div className="h-screen overflow-hidden bg-[#F3F6FB]">
+      <div className="w-full h-full pb-0">
         <div
-          className="bg-white rounded-[10px] shadow-sm border relative w-full"
+          className="bg-white rounded-[10px] shadow-sm border relative w-full h-full"
           style={{
             borderColor: "#e8e8e8",
-            minHeight: "calc(100vh - 48px)",
           }}
         >
-          {/* CLOSE */}
-          <button
-            type="button"
-            onClick={() => navigate("/form")}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition z-50"
-            aria-label="Close"
-          >
-            <X size={20} color="#265768" />
-          </button>
-
-          <div className="px-6 pt-6">
-            {/* HEADER */}
-            <div className="mb-3">
+          <div className="px-6 pt-4 pb-4">
+            {/* HEADER (Row 1: Logo + Close) */}
+            <div className="flex justify-between items-start mb-6">
               <div
                 className="text-3xl font-['Playfair_Display'] font-bold text-[#6b6b6b]"
                 style={{ textShadow: "0px 6px 6px rgba(0, 0, 0, 0.25)" }}
               >
                 Ezey
               </div>
-
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".csv,.xlsx,.xls"
-                onChange={handleFileChange}
-                hidden
-              />
-
               <button
-                onClick={triggerFile}
-                style={{
-                  position: "absolute",
-                  right: 24,
-                  top: 70,
-                  minWidth: 160,
-                  height: 34,
-                  background: "linear-gradient(0deg, #265768 0%, #4BACCE 100%)",
-                  borderRadius: 6,
-                  color: "white",
-                  fontSize: 12,
-                  fontFamily: "'Mulish', sans-serif",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.12)",
-                }}
+                type="button"
+                onClick={() => navigate("/form")}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition"
+                aria-label="Close"
               >
-                Upload File ( CSV / XLSX )
+                <X size={28} color="#265768" strokeWidth={3} />
               </button>
             </div>
 
-            {/* TITLE */}
-            <div className="flex items-center gap-2 mt-2 mb-3">
-              <svg width="18" height="20" viewBox="0 0 18 20" fill="none">
-                <path
-                  d="M16 16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V2C4 1.46957 4.21071 0.960859 4.58579 0.585786C4.96086 0.210714 5.46957 0 6 0H7V5L9 3.5L11 5V0H16C16.5304 0 17.0391 0.210714 17.4142 0.585786C17.7893 0.960859 18 1.46957 18 2V14C18 14.5304 17.7893 15.0391 17.4142 15.4142C17.0391 15.7893 16.5304 16 16 16ZM14 18V20H2C1.46957 20 0.960859 19.7893 0.585786 19.4142C0.210714 19.0391 0 18.5304 0 18V4H2V18H14Z"
-                  fill="#265768"
-                />
-              </svg>
+            {/* TITLE ROW (Row 2: Title + Upload) */}
+            <div className="flex justify-between items-end mb-3">
+              <div className="flex items-center gap-2">
+                <svg width="18" height="20" viewBox="0 0 18 20" fill="none">
+                  <path
+                    d="M16 16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V2C4 1.46957 4.21071 0.960859 4.58579 0.585786C4.96086 0.210714 5.46957 0 6 0H7V5L9 3.5L11 5V0H16C16.5304 0 17.0391 0.210714 17.4142 0.585786C17.7893 0.960859 18 1.46957 18 2V14C18 14.5304 17.7893 15.0391 17.4142 15.4142C17.0391 15.7893 16.5304 16 16 16ZM14 18V20H2C1.46957 20 0.960859 19.7893 0.585786 19.4142C0.210714 19.0391 0 18.5304 0 18V4H2V18H14Z"
+                    fill="#265768"
+                  />
+                </svg>
+                <h2 className="text-xl font-['Playfair_Display'] font-semibold text-[#265768]">
+                  Quick add subject
+                </h2>
+              </div>
 
-              <h2 className="text-xl font-['Playfair_Display'] font-semibold text-[#265768]">
-                Quick add subject
-              </h2>
+              <div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv,.xlsx,.xls"
+                  onChange={handleFileChange}
+                  hidden
+                />
+                <button
+                  onClick={triggerFile}
+                  style={{
+                    minWidth: 160,
+                    height: 34,
+                    background: "linear-gradient(0deg, #265768 0%, #4BACCE 100%)",
+                    borderRadius: 6,
+                    color: "white",
+                    fontSize: 12,
+                    fontFamily: "'Mulish', sans-serif",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.12)",
+                  }}
+                >
+                  Upload File ( CSV / XLSX )
+                </button>
+              </div>
             </div>
 
             <div
-              className="w-full h-[3px] bg-[#0b84d6] rounded"
+              className="h-[3px] bg-[#0b84d6] rounded w-[calc(100%+48px)] -mx-6"
               style={{ boxShadow: "0px 4px 4px 0px rgba(0,0,0,0.25)" }}
             />
 
@@ -346,7 +342,7 @@ export default function ManualEntrySubject() {
                   <div className="text-xs mb-1" style={{ color: "#265768", fontSize: "14px" }}>
                     Subject name
                   </div>
-                  <input name="name" value={form.name} onChange={handleChange} placeholder="e.g. DAA" style={inputStyle} className="custom-input"/>
+                  <input name="name" value={form.name} onChange={handleChange} placeholder="e.g. DAA" style={inputStyle} className="custom-input" />
                 </div>
 
                 <div className="col-span-3">
@@ -413,7 +409,7 @@ export default function ManualEntrySubject() {
                   <div className="text-xs mb-1" style={{ color: "#265768", fontSize: "14px" }}>
                     Semester
                   </div>
-                  <input name="semester" value={form.semester} onChange={handleChange} placeholder="e.g. I" style={inputStyle}  className="custom-input" />
+                  <input name="semester" value={form.semester} onChange={handleChange} placeholder="e.g. I" style={inputStyle} className="custom-input" />
                 </div>
 
                 <div className="col-span-3">
@@ -446,8 +442,21 @@ export default function ManualEntrySubject() {
 
             {/* TABLE */}
             {subjects.length === 0 ? (
-              <div className="mt-6 border rounded-lg flex justify-center items-center" style={{ height: "320px", borderColor: "#DFDFDF" }}>
-                <img src={nodata} alt="No Data" />
+              <div
+                className="mt-4 border rounded-lg flex flex-col justify-center items-center gap-1 px-4"
+                style={{ height: "380px", borderColor: "#DFDFDF" }}
+              >
+                <img
+                  src={nodata}
+                  alt="No Data"
+                  className="w-full max-w-[380px] h-auto object-contain mt-2 mb-[-10px]"
+                />
+                <div
+                  className="text-[24px] font-['Playfair_Display'] font-bold text-[#aeadad]"
+                  style={{ fontFamily: "Playfair Display, serif" }}
+                >
+                  No Data !
+                </div>
               </div>
             ) : (
               <div className="mt-6 pb-6">
@@ -501,16 +510,16 @@ export default function ManualEntrySubject() {
                     </div>
                   </div>
 
-                 
 
-               
+
+
                 </div>
               </div>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
