@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Edit2, Trash2 } from "lucide-react";
-import { getSubjects, deleteSubject, updateSubject } from "../../api/api";
+import { getSubjects, deleteSubjectAPI, updateSubjectAPI } from "../../api/api";
 
 export default function Subjects({ searchQuery = "", refreshTrigger = 0 }) {
   const [subjects, setSubjects] = useState([]);

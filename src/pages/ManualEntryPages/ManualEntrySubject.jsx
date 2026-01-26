@@ -2,91 +2,13 @@ import React, { useRef, useState, useEffect } from "react";
 import { Edit2, Trash2, X } from "lucide-react";
 import nodata from "../../assets/images/nodataa.png";
 import { useNavigate } from "react-router-dom";
+import {
+  getSubjects,
+  addSubjectAPI,
+  deleteSubjectAPI,
+  updateSubjectAPI, bulkUploadSubjects
+} from "../../api/api";
 
-// =============================
-// API Configuration
-// =============================
-const BASE_URL = "http://localhost:5000";
-
-const handleUnauthorized = (res) => {
-  if (res.status === 401) {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("user");
-  }
-};
-
-// =============================
-// API FUNCTIONS
-// =============================
-const getSubjects = async () => {
-  const res = await fetch(`${BASE_URL}/api/subjects`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-
-  if (!res.ok) {
-    handleUnauthorized(res);
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || `API Error: ${res.status}`);
-  }
-
-  return res.json();
-};
-
-const addSubjectAPI = async (subjectData) => {
-  const res = await fetch(`${BASE_URL}/api/subjects`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(subjectData),
-  });
-
-  if (!res.ok) {
-    handleUnauthorized(res);
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.message || `Failed to add subject: ${res.status}`);
-  }
-
-  return res.json();
-};
-
-const deleteSubjectAPI = async (subjectId) => {
-  const res = await fetch(`${BASE_URL}/api/subjects/${subjectId}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-  });
-
-  if (!res.ok) {
-    handleUnauthorized(res);
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(
-      errorData.message || `Failed to delete subject: ${res.status}`
-    );
-  }
-
-  return res.json();
-};
-
-const updateSubjectAPI = async (subjectId, subjectData) => {
-  const res = await fetch(`${BASE_URL}/api/subjects/${subjectId}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(subjectData),
-  });
-
-  if (!res.ok) {
-    handleUnauthorized(res);
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(
-      errorData.message || `Failed to update subject: ${res.status}`
-    );
-  }
-
-  return res.json();
-};
 
 // =============================
 // COMPONENT
@@ -126,10 +48,47 @@ export default function ManualEntrySubject() {
 
   const triggerFile = () => fileInputRef.current?.click();
 
-  const handleFileChange = (e) => {
-    const f = e.target.files && e.target.files[0];
-    if (!f) return;
-  };
+  // const handleFileChange = (e) => {
+  //   const f = e.target.files && e.target.files[0];
+  //   if (!f) return;
+  // };
+
+  const handleFileChange = async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const validTypes = [
+    "text/csv",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ];
+
+  if (
+    !validTypes.includes(file.type) &&
+    !file.name.match(/\.(csv|xlsx|xls)$/i)
+  ) {
+    alert("Please upload a valid CSV or XLSX file");
+    e.target.value = "";
+    return;
+  }
+
+  try {
+    setLoading(true);
+    setError("");
+
+    const response = await bulkUploadSubjects(file);
+
+    if (response?.success || Array.isArray(response)) {
+      await fetchSubjects();
+    }
+  } catch (err) {
+    alert("Failed to upload file: " + (err.message || "Unknown error"));
+  } finally {
+    setLoading(false);
+    e.target.value = "";
+  }
+};
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;

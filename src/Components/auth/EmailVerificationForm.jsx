@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Mail } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
-
-
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../Components/ui/Button";
 import { InputField } from "../../Components/ui/InputField";
 
@@ -12,7 +11,7 @@ import { emailVerificationAPI } from "../../api/api";
 const EmailVerificationForm = ({ initialEmail = "" }) => {
   const [email, setEmail] = useState(initialEmail);
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -88,7 +87,7 @@ const EmailVerificationForm = ({ initialEmail = "" }) => {
       </div>
 
 
-      <div className="flex justify-center mb-6">
+      {/* <div className="flex justify-center mb-6">
         <Button
           variant="primary"
           onClick={handleSubmit}
@@ -96,7 +95,25 @@ const EmailVerificationForm = ({ initialEmail = "" }) => {
         >
           {loading ? "Verifying..." : "Resend Link"}
         </Button>
-      </div>
+      </div> */}
+      <div className="flex flex-col items-center mb-6 relative">
+  <Button
+    variant="primary"
+    onClick={handleSubmit}
+    className={loading ? "opacity-70 pointer-events-none" : ""}
+  >
+    {loading ? "Verifying..." : "Resend Link"}
+  </Button>
+
+  {/* Small Login button */}
+  <button
+  onClick={() => navigate("/login")}
+  className="absolute right-10 -bottom-6 text-xs text-gray-500 hover:text-blue-600 transition"
+>
+  Already verified? <span className="font-medium underline">Login here</span>
+</button>
+
+</div>
     </>
   );
 };

@@ -7,6 +7,9 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupItems, setPopupItems] = useState([]);
+
 
   useEffect(() => {
     fetchFaculties();
@@ -83,6 +86,22 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
     setEditingId(null);
     setEditData(null);
   };
+
+//   const openSubjectsPopup = (subjects) => {
+//   setPopupItems(Array.isArray(subjects) ? subjects : []);
+//   setShowPopup(true);
+// };
+
+    const openSubjectsPopup = (subjects) => {
+  const list = Array.isArray(subjects)
+    ? subjects.map((s) => s?.name || s)
+    : [];
+
+  setPopupItems(list);
+  setShowPopup(true);
+};
+
+
 
   const query = searchQuery.toLowerCase();
   const filtered = facultyList.filter((f) =>
@@ -218,9 +237,16 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
                         className="w-[220px] px-2 py-1 border border-[#BFBFBF] rounded text-[13px] text-center focus:outline-none focus:ring-1 focus:ring-[#1DA5FF]"
                       />
                     ) : (
-                      <button className="text-[13px] font-medium text-[#1A8FE3] hover:underline">
-                        See List ({f.subjects?.length || 0})
-                      </button>
+                      // <button className="text-[13px] font-medium text-[#1A8FE3] hover:underline">
+                      //   See List ({f.subjects?.length || 0})
+                      // </button>
+                      <button
+  onClick={() => openSubjectsPopup(f.subjects)}
+  className="text-[13px] font-medium text-[#1A8FE3] hover:underline"
+>
+  See List ({f.subjects?.length || 0})
+</button>
+
                     )}
                   </td>
 
@@ -263,6 +289,50 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
             </tbody>
           </table>
         )}
+        {showPopup && (
+  <div
+    className="fixed inset-0 z-[999] flex items-center justify-center"
+    style={{ background: "rgba(0,0,0,0.35)" }}
+    onClick={() => setShowPopup(false)}
+  >
+    <div
+      className="bg-white rounded-[10px] shadow-lg border"
+      style={{
+        width: "420px",
+        maxHeight: "420px",
+        overflow: "hidden",
+        borderColor: "#e8e8e8",
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="flex items-center justify-between px-5 py-3 border-b">
+        <div className="text-[16px] font-semibold text-[#265768]">
+          Assigned Subjects
+        </div>
+        <button onClick={() => setShowPopup(false)}>✕</button>
+      </div>
+
+      <div className="p-4 overflow-y-auto" style={{ maxHeight: "340px" }}>
+        {popupItems.length === 0 ? (
+          <div className="text-center text-gray-400 py-10">No data</div>
+        ) : (
+          <ul className="space-y-2">
+            {popupItems.map((x, i) => (
+              <li
+                key={i}
+                className="text-[13px] text-[#265768] border rounded px-3 py-2"
+                style={{ borderColor: "#DFDFDF" }}
+              >
+                {x}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
 
       {/* Scrollbar Styling (exact ClassroomData) */}

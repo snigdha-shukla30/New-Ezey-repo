@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 import React, { useEffect, useState } from "react";
 import { User } from "lucide-react";
 import { dashboardSummaryAPI } from "../../api/api"; // ✅ path adjust karo
@@ -23,7 +31,7 @@ const FacultyStatus = () => {
 
   return (
     <div
-      className="bg-white rounded-[10px] border border-[#CACACA] shadow-[0_2px_8px_rgba(0,0,0,0.08)] "
+      className="bg-white rounded-[10px] border border-[#CACACA] shadow w-[340px] max-w-full h-[391px] "
       style={{
         width: "340px",
         height: "391px",
@@ -45,7 +53,7 @@ const FacultyStatus = () => {
 
       {/* Faculty List Container */}
       <div
-        className="rounded-[10px] border border-[#E5E7EB] custom-scroll mr-3"
+        className="rounded-[10px] border border-[#E5E7EB] custom-scroll mx-2 my-2 h-[318px]"
         style={{
           width: "320px",
           height: "318px",

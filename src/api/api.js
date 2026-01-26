@@ -80,11 +80,7 @@ export const dashboardSummaryAPI = async () => {
     handleUnauthorized(res);
     const errorData = await res.json().catch(() => ({}));
     throw new Error(errorData.message || `API Error: ${res.status}`);
-    // if (res.status === 401) {
-    //   tokenManager.clearTokens();  // ⭐ CLEAR ON UNAUTHORIZED
-    //   window.location.href = '/login';
-    // }
-    // throw new Error(`API Error: ${res.status}`);
+  
   }
 
   return res.json();
@@ -297,7 +293,7 @@ export const getSubjects = async () => {
 }
 
 // ✅ POST - Add new subject
-export const addSubject = async (subjectData) => {
+export const addSubjectAPI = async (subjectData) => {
   try {
     const res = await fetch(`${BASE_URL}/api/subjects`, {
       method: "POST",
@@ -322,7 +318,7 @@ export const addSubject = async (subjectData) => {
 }
 
 // ✅ PATCH - Update subject by ID
-export const updateSubject = async (subjectId, subjectData) => {
+export const updateSubjectAPI = async (subjectId, subjectData) => {
   try {
     const res = await fetch(`${BASE_URL}/api/subjects/${subjectId}`, {
       method: "PATCH",
@@ -347,7 +343,7 @@ export const updateSubject = async (subjectId, subjectData) => {
 }
 
 // ✅ DELETE - Delete subject by ID
-export const deleteSubject = async (subjectId) => {
+export const deleteSubjectAPI = async (subjectId) => {
   try {
     const res = await fetch(`${BASE_URL}/api/subjects/${subjectId}`, {
       method: "DELETE",
@@ -548,6 +544,31 @@ export const bulkUploadClassrooms = async (file) => {
     throw error;
   }
 };
+
+export const bulkUploadSubjects = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch(`${BASE_URL}/subjects/bulk-upload`, {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      handleUnauthorized(res);
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || `Failed to upload file: ${res.status}`);
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error("[API Error] bulkUploadSubjects:", error.message);
+    throw error;
+  }
+};
+
 
 export const logoutAPI = async () => {
   const token = localStorage.getItem("token");

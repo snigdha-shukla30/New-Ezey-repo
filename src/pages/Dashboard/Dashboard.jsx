@@ -1,11 +1,5 @@
 
 
-
-
-
-
-
-
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../Components/ui/Sidebar";
 import Header from "../../Components/ui/Header";
@@ -70,7 +64,7 @@ const Dashboard = () => {
 
   return (
     // <div className="min-h-screen h-screen bg-[#FFFFFF] flex px-2 py-4 gap-4 overflow-hidden" style={{ fontFamily: 'Mulish, sans-serif' }}>
-    <div className="h-screen bg-[#FFFFFF] flex px-2 pt-4 gap-4 overflow-hidden" style={{ fontFamily: 'Mulish, sans-serif' }}>
+    <div className="h-screen bg-[#FFFFFF] flex px-2 pt-4 gap-4  overflow-hidden" style={{ fontFamily: 'Mulish, sans-serif' }}>
 
       <div className="shrink-0">
         <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
@@ -82,13 +76,13 @@ const Dashboard = () => {
             <Header />
           </div>
 
-          <div className="w-full bg-white rounded-[10px] border border-[#BFBFBF] shadow-[0_16px_40px_rgba(148,163,184,0.22)] px-8 pt-6 pb-11">
+          <div className="w-full bg-white rounded-[10px] border border-[#BFBFBF] shadow-[0_16px_40px_rgba(148,163,184,0.22)] px-8 py-12">
             {loading && <p className="text-center mt-10">Loading dashboard...</p>}
             {error && <p className="text-center text-red-500">{error}</p>}
 
             {!loading && (
               <>
-                <section className="mb-6 flex items-start justify-between gap-8">
+                <section className="mb-6 flex items-start justify-between gap-8 ">
                   <div>
                     <h1 className="text-[32px] leading-tight font-bold text-[#265768] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
                       Welcome back, Divyansh!

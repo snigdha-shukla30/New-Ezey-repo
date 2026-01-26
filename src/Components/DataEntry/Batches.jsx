@@ -8,6 +8,9 @@ export default function Batches({ searchQuery, refreshTrigger }) {
   const [error, setError] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupTitle, setPopupTitle] = useState("");
+  const [popupItems, setPopupItems] = useState([]);
 
   useEffect(() => {
     fetchBatches();
@@ -16,10 +19,10 @@ export default function Batches({ searchQuery, refreshTrigger }) {
   const fetchBatches = async () => {
     try {
       setLoading(true);
+
       const response = await getBatches();
-      if (response.success && response.data) {
-        setBatches(response.data);
-      }
+
+      setBatches(response.data || []);
     } catch (err) {
       console.error("Error fetching batches:", err);
       setError(err.message);
@@ -27,6 +30,30 @@ export default function Batches({ searchQuery, refreshTrigger }) {
       setLoading(false);
     }
   };
+
+  //   const fetchBatches = async () => {
+  //   try {
+  //     setLoading(true);
+
+  //     const response = await getBatches();
+
+  //      console.log("GET BATCHES RESPONSE:", response);
+
+  //     const batchList =
+  //       response?.data?.batches ||
+  //       response?.data ||
+  //       response?.batches ||
+  //       [];
+
+  //     setBatches(batchList);
+
+  //   } catch (err) {
+  //     console.error("Error fetching batches:", err);
+  //     setError(err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleDelete = async (batchId) => {
     if (!window.confirm("Are you sure you want to delete this batch?")) {
@@ -49,14 +76,32 @@ export default function Batches({ searchQuery, refreshTrigger }) {
     setEditData({ ...batch });
   };
 
+  // const handleUpdate = async () => {
+  //   try {
+  //     const response = await updateBatch(editingId, editData);
+  //     if (response.success) {
+  //       setBatches(batches.map((b) => (b._id === editingId ? editData : b)));
+  //       setEditingId(null);
+  //       setEditData(null);
+  //     }
+  //   } catch (err) {
+  //     console.error("Error updating batch:", err);
+  //     alert(err.message || "Failed to update batch");
+  //   }
+  // };
+
   const handleUpdate = async () => {
     try {
       const response = await updateBatch(editingId, editData);
-      if (response.success) {
-        setBatches(batches.map((b) => (b._id === editingId ? editData : b)));
-        setEditingId(null);
-        setEditData(null);
-      }
+
+      const updated = response?.data || editData;
+
+      setBatches((prev) =>
+        prev.map((b) => (b._id === editingId ? updated : b)),
+      );
+
+      setEditingId(null);
+      setEditData(null);
     } catch (err) {
       console.error("Error updating batch:", err);
       alert(err.message || "Failed to update batch");
@@ -71,9 +116,11 @@ export default function Batches({ searchQuery, refreshTrigger }) {
   const q = (searchQuery || "").toLowerCase();
   const filtered = batches.filter(
     (b) =>
-      (b.name || "").toLowerCase().includes(q) ||
-      (b.code || "").toLowerCase().includes(q) ||
-      (b.department || "").toLowerCase().includes(q)
+      // (b.name || "").toLowerCase().includes(q) ||
+      // (b.code || "").toLowerCase().includes(q) ||
+      (b.degree || "").toLowerCase().includes(q) ||
+      (b.batchCode || "").toLowerCase().includes(q) ||
+      (b.department || "").toLowerCase().includes(q),
   );
 
   if (loading) {
@@ -97,6 +144,12 @@ export default function Batches({ searchQuery, refreshTrigger }) {
       </div>
     );
   }
+
+  const openListPopup = (title, items) => {
+    setPopupTitle(title);
+    setPopupItems(Array.isArray(items) ? items : []);
+    setShowPopup(true);
+  };
 
   return (
     <div
@@ -148,8 +201,8 @@ export default function Batches({ searchQuery, refreshTrigger }) {
         ) : (
           <table className="w-full table-fixed">
             <colgroup>
-              <col style={{ width: "16%" }} />
-              <col style={{ width: "12%" }} />
+              <col style={{ width: "15%" }} />
+              <col style={{ width: "13%" }} />
               <col style={{ width: "16%" }} />
               <col style={{ width: "10%" }} />
               <col style={{ width: "10%" }} />
@@ -171,14 +224,14 @@ export default function Batches({ searchQuery, refreshTrigger }) {
                     {editingId === item._id ? (
                       <input
                         type="text"
-                        value={editData.name}
+                        value={editData.degree}
                         onChange={(e) =>
-                          setEditData({ ...editData, name: e.target.value })
+                          setEditData({ ...editData, degree: e.target.value })
                         }
                         className="w-[180px] px-2 py-1 border border-[#BFBFBF] rounded text-[13px] text-center focus:outline-none focus:ring-1 focus:ring-[#1DA5FF]"
                       />
                     ) : (
-                      item.name || "N/A"
+                      item.degree || "N/A"
                     )}
                   </td>
 
@@ -187,14 +240,17 @@ export default function Batches({ searchQuery, refreshTrigger }) {
                     {editingId === item._id ? (
                       <input
                         type="text"
-                        value={editData.code}
+                        value={editData.batchCode}
                         onChange={(e) =>
-                          setEditData({ ...editData, code: e.target.value })
+                          setEditData({
+                            ...editData,
+                            batchCode: e.target.value,
+                          })
                         }
                         className="w-[120px] px-2 py-1 border border-[#BFBFBF] rounded text-[13px] text-center focus:outline-none focus:ring-1 focus:ring-[#1DA5FF]"
                       />
                     ) : (
-                      item.code || "N/A"
+                      item.batchCode || "N/A"
                     )}
                   </td>
 
@@ -205,7 +261,10 @@ export default function Batches({ searchQuery, refreshTrigger }) {
                         type="text"
                         value={editData.department}
                         onChange={(e) =>
-                          setEditData({ ...editData, department: e.target.value })
+                          setEditData({
+                            ...editData,
+                            department: e.target.value,
+                          })
                         }
                         className="w-[180px] px-2 py-1 border border-[#BFBFBF] rounded text-[13px] text-center focus:outline-none focus:ring-1 focus:ring-[#1DA5FF]"
                       />
@@ -219,14 +278,14 @@ export default function Batches({ searchQuery, refreshTrigger }) {
                     {editingId === item._id ? (
                       <input
                         type="number"
-                        value={editData.strength}
+                        value={editData.capacity}
                         onChange={(e) =>
-                          setEditData({ ...editData, strength: e.target.value })
+                          setEditData({ ...editData, capacity: e.target.value })
                         }
                         className="w-[110px] px-2 py-1 border border-[#BFBFBF] rounded text-[13px] text-center focus:outline-none focus:ring-1 focus:ring-[#1DA5FF]"
                       />
                     ) : (
-                      item.strength || "N/A"
+                      item.capacity || item.strength || "N/A"
                     )}
                   </td>
 
@@ -248,16 +307,31 @@ export default function Batches({ searchQuery, refreshTrigger }) {
 
                   {/* Section (Read-only) */}
                   <td className="py-5 text-center text-[#8A96A8]">
-                    {item.name?.split(" - ")[1] || "A"}
+                    {item.batchCode?.split("_")[2] || "A"}
                   </td>
 
                   {/* Assigned Subjects */}
+
                   <td className="py-5 text-center">
-                    <button className="text-[#1A8FE3] hover:underline text-[13px] font-medium">
-                      {item.subjects && item.subjects.length > 0
-                        ? "See List"
-                        : "None"}
-                    </button>
+                    {(item.raw?.subjects || item.subjects || []).length > 0 ? (
+                      <button
+                        onClick={() =>
+                          openListPopup(
+                            "Assigned Subjects",
+                            (item.raw?.subjects || item.subjects || []).map(
+                              (s) =>
+                                typeof s.subject === "object" ? s.subject : s,
+                            ),
+                          )
+                        }
+                        className="text-[#1A8FE3] hover:underline text-[13px] font-medium"
+                      >
+                        See List ({(item.raw?.subjects || item.subjects).length}
+                        )
+                      </button>
+                    ) : (
+                      "None"
+                    )}
                   </td>
 
                   {/* Actions */}
@@ -301,6 +375,53 @@ export default function Batches({ searchQuery, refreshTrigger }) {
             </tbody>
           </table>
         )}
+
+        {showPopup && (
+          <div
+            className="fixed inset-0 z-[999] flex items-center justify-center"
+            style={{ background: "rgba(0,0,0,0.35)" }}
+            onClick={() => setShowPopup(false)}
+          >
+            <div
+              className="bg-white rounded-[10px] shadow-lg border"
+              style={{
+                width: "420px",
+                maxHeight: "420px",
+                overflow: "hidden",
+                borderColor: "#e8e8e8",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between px-5 py-3 border-b">
+                <div className="text-[16px] font-semibold text-[#265768]">
+                  {popupTitle}
+                </div>
+                <button onClick={() => setShowPopup(false)}>✕</button>
+              </div>
+
+              <div
+                className="p-4 overflow-y-auto"
+                style={{ maxHeight: "340px" }}
+              >
+                {popupItems.length === 0 ? (
+                  <div className="text-center text-gray-400 py-10">No data</div>
+                ) : (
+                  <ul className="space-y-2">
+                    {popupItems.map((x, i) => (
+                      <li
+                        key={i}
+                        className="text-[13px] text-[#265768] border rounded px-3 py-2"
+                        style={{ borderColor: "#DFDFDF" }}
+                      >
+                        {x?.name || "-"} {x?.code ? `(${x.code})` : ""}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Scrollbar Styling (exact ClassroomData) */}
@@ -328,8 +449,3 @@ export default function Batches({ searchQuery, refreshTrigger }) {
     </div>
   );
 }
-
-
-
-
-

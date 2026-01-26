@@ -105,12 +105,20 @@ export default function GenerateTT() {
   // =====================================================
   // ✅ helper for display label
   // =====================================================
+  // const formatBatchLabel = (b) => {
+  //   const name = b?.name || "-";
+  //   const code = b?.code || "-";
+  //   const semester = b?.semester ?? "-";
+  //   return `${name} - ${code} (Semester ${semester})`;
+  // };
+
   const formatBatchLabel = (b) => {
-    const name = b?.name || "-";
-    const code = b?.code || "-";
-    const semester = b?.semester ?? "-";
-    return `${name} - ${code} (Semester ${semester})`;
-  };
+  const degree = b?.degree || "-";
+  const batchCode = b?.batchCode || "-";
+  const semester = b?.semester ?? "-";
+  return `${degree} - ${batchCode} (Semester ${semester})`;
+};
+
 
   return (
     // ✅ CardContainer wrapper removed (to avoid double card)

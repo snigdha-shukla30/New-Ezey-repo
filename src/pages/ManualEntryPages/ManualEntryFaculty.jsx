@@ -242,7 +242,6 @@ export const ManualEntryFaculty = () => {
       if (response.success) {
         await loadFaculties();
         setShowTable(true);
-        alert(`Successfully uploaded ${response.data?.count || "faculties"}!`);
       }
     } catch (err) {
       alert("Failed to upload file: " + (err.message || "Unknown error"));

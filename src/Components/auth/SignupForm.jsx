@@ -179,9 +179,9 @@ const SignupForm = () => {
             className="w-full h-[40px] pl-10 pr-5 rounded-[10px] border-[1.5px] border-[#DFDFDF] text-[13px] text-[#7A8C94] outline-none focus:border-[#4BACCE] transition-colors appearance-none bg-white"
           >
             <option value="">Account Type</option>
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-            <option value="admin">Admin</option>
+            <option value="staff">staff</option>
+            <option value="coordinator">coordinator</option>
+            <option value="admin">admin</option>
           </select>
           <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
             <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
