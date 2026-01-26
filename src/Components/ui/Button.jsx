@@ -28,7 +28,7 @@ export const Button = ({
 
     secondary: `
       w-[80px]
-      h-[40px]
+      h-[30px]
       rounded-[4px]
       bg-white
       border-[3px]

@@ -2,13 +2,13 @@
 
 export const CardContainer = ({ children, title }) => {
   return (
-    <div className="relative px-8 py-4">
+    <div className="relative px-8 py-3">
       <div
         className="
           bg-white
           rounded-2xl
           shadow-2xl
-          p-8
+          p-4
           border
           border-gray-100
           max-w-3xl 
