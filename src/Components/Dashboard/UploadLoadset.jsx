@@ -23,7 +23,7 @@ const UploadLoadset = () => {
       {/* 3 Buttons – centered, vertical */}
       <div className="flex-1 flex flex-col items-center justify-center gap-7">
         <button onClick={() => navigate("/generate")}
-          
+
           className="w-[230px] h-[40px] text-[13px] font-medium text-[#4B8FA8] bg-white border border-[#B4D4DF] rounded-[10px] shadow-[0px_4px_20px_rgba(148,163,184,0.15)] hover:text-white transition-all group"
           style={{
             background: 'white'

@@ -39,40 +39,40 @@ const Dashboard = () => {
 
   const stats = dashboardData
     ? [
-        {
-          label: "Classroom",
-          count: dashboardData.totalClassrooms,
-          imageUrl:
-            "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=800&q=80",
-        },
-        {
-          label: "Subjects",
-          count: dashboardData.totalSubjects,
-          imageUrl:
-            "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80",
-        },
-        {
-          label: "Faculty",
-          count: dashboardData.totalFaculties,
-          imageUrl:
-            "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
-        },
-        {
-          label: "Time Tables",
-          count: dashboardData.totalApprovedTimetables,
-          imageUrl:
-            "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=800&q=80",
-        },
-      ]
+      {
+        label: "Classroom",
+        count: dashboardData.totalClassrooms,
+        imageUrl:
+          "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=800&q=80",
+      },
+      {
+        label: "Subjects",
+        count: dashboardData.totalSubjects,
+        imageUrl:
+          "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80",
+      },
+      {
+        label: "Faculty",
+        count: dashboardData.totalFaculties,
+        imageUrl:
+          "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
+      },
+      {
+        label: "Time Tables",
+        count: dashboardData.totalApprovedTimetables,
+        imageUrl:
+          "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=800&q=80",
+      },
+    ]
     : [
-        
-      ];
+
+    ];
 
   return (
     // <div className="min-h-screen h-screen bg-[#FFFFFF] flex px-2 py-4 gap-4 overflow-hidden" style={{ fontFamily: 'Mulish, sans-serif' }}>
     <div className="h-screen bg-[#FFFFFF] flex px-2 pt-4 gap-4 overflow-hidden" style={{ fontFamily: 'Mulish, sans-serif' }}>
 
-       <div className="shrink-0">
+      <div className="shrink-0">
         <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
       </div>
 
@@ -99,7 +99,7 @@ const Dashboard = () => {
                     </p>
                   </div>
 
-                
+
                 </section>
 
                 <section className="flex items-start justify-end gap-6 mb-15">
@@ -108,8 +108,8 @@ const Dashboard = () => {
                       <StatsCard key={index} {...item} />
                     ))}
                   </div>
-                  
-                  <FacultyStatus 
+
+                  <FacultyStatus
                     facultyList={dashboardData?.facultyList}
                     totalFaculties={dashboardData?.totalFaculties}
                   />
