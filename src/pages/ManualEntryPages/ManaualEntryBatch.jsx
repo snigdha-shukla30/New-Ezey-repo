@@ -1,3 +1,5 @@
+
+
 import React, { useRef, useState, useEffect } from "react";
 import { Edit2, Trash2, X } from "lucide-react";
 import nodata from "../../assets/images/nodata.jpeg";
@@ -545,7 +547,55 @@ export default function ManualEntryBatch() {
           className="bg-white rounded-[10px] shadow-sm border relative w-full"
           style={{ borderColor: "#e8e8e8", minHeight: "100vh" }}
         >
-          <button
+          {/* CLOSE BUTTON */}
+<button
+  type="button"
+  onClick={() => navigate("/form")}
+  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 z-50"
+>
+  <X size={20} color="#265768" />
+</button>
+
+{/* HEADER */}
+<div className="mb-2 relative">
+  {/* Ezey */}
+  <div
+    className="text-3xl font-['Playfair_Display'] font-bold text-[#6b6b6b]"
+    style={{ textShadow: "0px 6px 6px rgba(0,0,0,0.25)" }}
+  >
+    Ezey
+  </div>
+
+  {/* Upload */}
+  <input
+    ref={fileInputRef}
+    type="file"
+    accept=".csv,.xlsx,.xls"
+    onChange={handleFileChange}
+    hidden
+  />
+
+  <button
+    onClick={triggerFile}
+    style={{
+      position: "absolute",
+      right: 0,
+      top: 48,
+      minWidth: 180,
+      height: 36,
+      background: "linear-gradient(0deg,#265768 0%,#4BACCE 100%)",
+      borderRadius: 6,
+      color: "white",
+      fontSize: 12,
+      fontFamily: "'Mulish', sans-serif",
+      boxShadow: "0 2px 4px rgba(0,0,0,0.12)",
+    }}
+  >
+    Upload File ( CSV / XLSX )
+  </button>
+</div>
+
+          {/* <button
             type="button"
             onClick={() => navigate("/form")}
             className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition z-50"
@@ -589,8 +639,8 @@ export default function ManualEntryBatch() {
               >
                 Upload File ( CSV / XLSX )
               </button>
-            </div>
-
+            </div> */}
+<div className="px-6 pt-6 pb-8">
             <div className="flex items-center gap-2 mb-4">
               <h2 className="text-xl font-['Playfair_Display'] font-semibold text-[#265768]">
                 Quick add batch
@@ -663,7 +713,7 @@ export default function ManualEntryBatch() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 mb-6">
+            <div className="grid grid-cols-4 gap-6 mb-6">
               <div>
                 <div style={labelStyle}>Semester</div>
                 <input
@@ -698,9 +748,7 @@ export default function ManualEntryBatch() {
                 displayKey="name"
                 secondaryKey="email"
               />
-            </div>
-
-            <div className="flex justify-end mb-6">
+              <div className="flex justify-end mb-6">
               <button
                 onClick={handleAddBatch}
                 disabled={loading}
@@ -720,6 +768,28 @@ export default function ManualEntryBatch() {
                 {loading ? "Processing..." : editingId ? "Update batch" : "+ Add batch"}
               </button>
             </div>
+            </div>
+
+            {/* <div className="flex justify-end mb-6">
+              <button
+                onClick={handleAddBatch}
+                disabled={loading}
+                style={{
+                  padding: "10px 32px",
+                  fontSize: "13px",
+                  fontWeight: "600",
+                  color: "#4BACCE",
+                  background: "white",
+                  border: "1.5px solid #4BACCE",
+                  borderRadius: "8px",
+                  cursor: loading ? "not-allowed" : "pointer",
+                  fontFamily: "'Mulish', sans-serif",
+                  opacity: loading ? 0.6 : 1,
+                }}
+              >
+                {loading ? "Processing..." : editingId ? "Update batch" : "+ Add batch"}
+              </button>
+            </div> */}
 
             <div className="w-full h-[2px] bg-[#D9D9D9] mb-6" />
 
