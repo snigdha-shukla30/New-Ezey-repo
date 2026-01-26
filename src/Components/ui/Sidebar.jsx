@@ -51,16 +51,15 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
         onClick={() => handleMenuClick(item)}
         className={`relative w-full flex items-center gap-2 py-3 mb-2 
         transition-[transform,background,box-shadow,color] duration-300 ease-out
-        ${
-          isActive
+        ${isActive
             ? "text-white pl-5 pr-5 ml-[-16px] w-[calc(100%+16px)] rounded-xl rounded-l-none scale-[1.01] overflow-hidden"
             : "text-white/55 hover:text-white/85 hover:bg-white/10 hover:translate-x-[2px] px-5 rounded-xl"
-        }`}
+          }`}
         style={
           isActive
             ? {
-                background: "linear-gradient(272deg, #167291 0%, #8B7EFF 80%)",
-              }
+              background: "linear-gradient(272deg, #167291 0%, #8B7EFF 80%)",
+            }
             : {}
         }
       >
@@ -83,10 +82,8 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
         <Icon size={18} className="relative z-30" />
 
         <span
-          className={`relative z-30 ${isActive ? "text-white" : "text-white/55"}`}
+          className={`relative z-30 flex-1 truncate ${isActive ? "text-white" : "text-white/55"}`}
           style={{
-            width: "105px",
-            height: "30px",
             fontFamily: "Mulish, sans-serif",
             fontWeight: 600,
             fontSize: "20px",
@@ -119,23 +116,18 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
       <div className="px-4">
         {/* Ezey Text */}
         <div
-          className="absolute text-white"
+          className="text-white text-center mb-10 mt-4"
           style={{
-            width: "64px",
-            height: "38px",
-            top: "21px",
-            left: "88px",
             fontFamily: "Playfair Display, serif",
             fontWeight: 700,
             fontSize: "32px",
             lineHeight: "120%",
-            textAlign: "center",
           }}
         >
           Ezey
         </div>
 
-        <div className="h-20" />
+
 
         <div className="text-[11px] uppercase tracking-[0.18em] text-white/65 mb-3 ml-1">
           Menu
@@ -186,15 +178,12 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
                 </div>
 
                 <div
-                  className="text-white truncate"
+                  className="text-white w-full truncate"
                   style={{
                     fontFamily: "Mulish, sans-serif",
                     fontWeight: 400,
                     fontSize: "10px",
                     lineHeight: "150%",
-                    width: "123px",
-                    height: "12px",
-                    opacity: 1,
                   }}
                   title={user?.email || "user@email.com"}
                 >
