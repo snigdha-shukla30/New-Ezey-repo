@@ -9,7 +9,10 @@ import { InputField } from "../../Components/ui/InputField";
 import Alert from "../../Components/ui/Alert";
 
 
+import EmailVerificationForm from "./EmailVerificationForm";
+
 const SignupForm = () => {
+  const [showVerification, setShowVerification] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
@@ -48,8 +51,7 @@ const SignupForm = () => {
 
       if (res.success) {
         showAlert("Signup successful", "success");
-        // Optionally redirect after success
-        setTimeout(() => navigate("/login"), 1500);
+        setShowVerification(true);
       } else {
         showAlert(res.message || "Signup failed", "error");
       }
@@ -60,6 +62,21 @@ const SignupForm = () => {
       setLoading(false);
     }
   };
+
+  if (showVerification) {
+    return (
+      <>
+        {alert && (
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(null)}
+          />
+        )}
+        <EmailVerificationForm initialEmail={email} />
+      </>
+    );
+  }
 
   return (
     <>

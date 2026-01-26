@@ -36,10 +36,10 @@ function App() {
         <Route path="/signup" element={<EzeySignupPage />} />
         <Route path="/forgetpassword" element={<EzeyForgotPasswordPage />} />
         <Route path="/verification" element={<EmailVerificationPage />} />
-        <Route path="/form" element={< EzeyForm />} /> 
+        <Route path="/form" element={< EzeyForm />} />
         <Route path="/splash" element={<Splash />} />
         <Route path="/dashboard" element={< Dashboard />} />
-        <Route path="/import" element={< ImportSummary />} /> 
+        <Route path="/import" element={< ImportSummary />} />
         {/* <Route path="/dashboard" element={< Dashboard />} />  */}
         <Route path="/dataentry" element={< DataEntry />} />
         <Route path="/manual/classroom" element={< ManualEntryClassroom />} />
@@ -47,15 +47,15 @@ function App() {
         <Route path="/manual/subjects" element={< ManualEntrySubject />} />
         <Route path="/manual/batches" element={< ManualEntryBatch />} />
         <Route path="/generate" element={< GenerateTimetablePage />} />
-         <Route
-        path="/timetable/preview/:batchId"
-        element={<BalancedTimeTablePage />}
-       /> 
+        <Route
+          path="/timetable/preview/:batchId"
+          element={<BalancedTimeTablePage />}
+        />
         {/* <Route path="/timetable/preview/:timetableId" element={< BalancedTimeTablePage />} /> */}
-        
-        {/* <Route path="/verified" element={< EmailVerifiedPage />} />  */} 
 
-         <Route path="/verified" element={<EmailVerifiedPage />} />
+        {/* <Route path="/verified" element={< EmailVerifiedPage />} />  */}
+
+        <Route path="/verified" element={<EmailVerifiedPage />} />
 
         {/* Protected Routes - Require Authentication */}
         {/* <Route 
