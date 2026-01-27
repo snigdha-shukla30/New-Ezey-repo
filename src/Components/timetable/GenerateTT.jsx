@@ -8,6 +8,8 @@ import {
 } from "../../api/api";
 import { Button } from "../../Components/ui/Button";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
 
 export default function GenerateTT() {
   const [activeTab, setActiveTab] = useState("generate");
@@ -62,9 +64,14 @@ export default function GenerateTT() {
 
   const handleGenerate = async () => {
   if (!selectedBatchId) {
-    alert("Please select batch from dropdown");
-    return;
-  }
+  Swal.fire({
+    icon: "warning",
+    text: "Please select batch from dropdown",
+    confirmButtonColor: "#4BACCE",
+  });
+  return;
+}
+
 
   try {
     setLoading(true);
@@ -74,9 +81,14 @@ export default function GenerateTT() {
     // ✅ new tab/window open
     window.open(url, "_blank", "noopener,noreferrer");
   } catch (err) {
-    console.error(err);
-    alert(err.message || "Failed to open timetable");
-  } finally {
+  console.error(err);
+  Swal.fire({
+    icon: "error",
+    text: err.message || "Failed to open timetable",
+    confirmButtonColor: "#4BACCE",
+  });
+}
+ finally {
     setLoading(false);
   }
 };
@@ -105,12 +117,7 @@ export default function GenerateTT() {
   // =====================================================
   // ✅ helper for display label
   // =====================================================
-  // const formatBatchLabel = (b) => {
-  //   const name = b?.name || "-";
-  //   const code = b?.code || "-";
-  //   const semester = b?.semester ?? "-";
-  //   return `${name} - ${code} (Semester ${semester})`;
-  // };
+ 
 
   const formatBatchLabel = (b) => {
   const degree = b?.degree || "-";

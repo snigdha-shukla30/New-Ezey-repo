@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Edit2, Trash2 } from "lucide-react";
 import { getFaculties, updateFaculty, deleteFaculty } from "../../api/api";
+import Swal from "sweetalert2";
 
 export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
   const [facultyList, setFacultyList] = useState([]);
@@ -9,7 +10,6 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
   const [editData, setEditData] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [popupItems, setPopupItems] = useState([]);
-
 
   useEffect(() => {
     fetchFaculties();
@@ -24,7 +24,11 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
       }
     } catch (error) {
       console.error("Error fetching faculties:", error);
-      alert("Failed to fetch faculties");
+      Swal.fire({
+        icon: "error",
+        text: "Failed to fetch faculties",
+        confirmButtonColor: "#4BACCE",
+      });
     } finally {
       setLoading(false);
     }
@@ -38,21 +42,50 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
     });
   };
 
-  const handleDelete = async (facultyId) => {
-    if (!window.confirm("Are you sure you want to delete this faculty?")) {
-      return;
-    }
+  // const handleDelete = async (facultyId) => {
+  //   if (!window.confirm("Are you sure you want to delete this faculty?")) {
+  //     return;
+  //   }
 
-    try {
-      const response = await deleteFaculty(facultyId);
-      if (response.success) {
-        fetchFaculties();
-      }
-    } catch (error) {
-      console.error("Error deleting faculty:", error);
-      alert(error.message || "Failed to delete faculty");
+  //   try {
+  //     const response = await deleteFaculty(facultyId);
+  //     if (response.success) {
+  //       fetchFaculties();
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting faculty:", error);
+  //     alert(error.message || "Failed to delete faculty");
+  //   }
+  // };
+
+  const handleDelete = async (facultyId) => {
+  const result = await Swal.fire({
+    text: "Are you sure you want to delete this faculty?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#F04438",
+    cancelButtonColor: "#4BACCE",
+    confirmButtonText: "Yes",
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const response = await deleteFaculty(facultyId);
+    if (response.success) {
+      fetchFaculties();
     }
-  };
+  } catch (error) {
+    console.error("Error deleting faculty:", error);
+
+    Swal.fire({
+      icon: "error",
+      text: error.message || "Failed to delete faculty",
+      confirmButtonColor: "#4BACCE",
+    });
+  }
+};
+
 
   const handleUpdate = async () => {
     try {
@@ -70,15 +103,20 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
           facultyList.map((f) =>
             f._id === editingId
               ? { ...f, ...updateData, subjects: updateData.subjects }
-              : f
-          )
+              : f,
+          ),
         );
         setEditingId(null);
         setEditData(null);
       }
     } catch (error) {
       console.error("Error updating faculty:", error);
-      alert(error.message || "Failed to update faculty");
+      Swal.fire({
+  icon: "error",
+  text: error.message || "Failed to update faculty",
+  confirmButtonColor: "#4BACCE",
+});
+
     }
   };
 
@@ -87,25 +125,23 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
     setEditData(null);
   };
 
-//   const openSubjectsPopup = (subjects) => {
-//   setPopupItems(Array.isArray(subjects) ? subjects : []);
-//   setShowPopup(true);
-// };
+  //   const openSubjectsPopup = (subjects) => {
+  //   setPopupItems(Array.isArray(subjects) ? subjects : []);
+  //   setShowPopup(true);
+  // };
 
-    const openSubjectsPopup = (subjects) => {
-  const list = Array.isArray(subjects)
-    ? subjects.map((s) => s?.name || s)
-    : [];
+  const openSubjectsPopup = (subjects) => {
+    const list = Array.isArray(subjects)
+      ? subjects.map((s) => s?.name || s)
+      : [];
 
-  setPopupItems(list);
-  setShowPopup(true);
-};
-
-
+    setPopupItems(list);
+    setShowPopup(true);
+  };
 
   const query = searchQuery.toLowerCase();
   const filtered = facultyList.filter((f) =>
-    `${f.name} ${f.email}`.toLowerCase().includes(query)
+    `${f.name} ${f.email}`.toLowerCase().includes(query),
   );
 
   if (loading) {
@@ -241,12 +277,11 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
                       //   See List ({f.subjects?.length || 0})
                       // </button>
                       <button
-  onClick={() => openSubjectsPopup(f.subjects)}
-  className="text-[13px] font-medium text-[#1A8FE3] hover:underline"
->
-  See List ({f.subjects?.length || 0})
-</button>
-
+                        onClick={() => openSubjectsPopup(f.subjects)}
+                        className="text-[13px] font-medium text-[#1A8FE3] hover:underline"
+                      >
+                        See List ({f.subjects?.length || 0})
+                      </button>
                     )}
                   </td>
 
@@ -290,49 +325,51 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
           </table>
         )}
         {showPopup && (
-  <div
-    className="fixed inset-0 z-[999] flex items-center justify-center"
-    style={{ background: "rgba(0,0,0,0.35)" }}
-    onClick={() => setShowPopup(false)}
-  >
-    <div
-      className="bg-white rounded-[10px] shadow-lg border"
-      style={{
-        width: "420px",
-        maxHeight: "420px",
-        overflow: "hidden",
-        borderColor: "#e8e8e8",
-      }}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <div className="flex items-center justify-between px-5 py-3 border-b">
-        <div className="text-[16px] font-semibold text-[#265768]">
-          Assigned Subjects
-        </div>
-        <button onClick={() => setShowPopup(false)}>✕</button>
-      </div>
+          <div
+            className="fixed inset-0 z-[999] flex items-center justify-center"
+            style={{ background: "rgba(0,0,0,0.35)" }}
+            onClick={() => setShowPopup(false)}
+          >
+            <div
+              className="bg-white rounded-[10px] shadow-lg border"
+              style={{
+                width: "420px",
+                maxHeight: "420px",
+                overflow: "hidden",
+                borderColor: "#e8e8e8",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between px-5 py-3 border-b">
+                <div className="text-[16px] font-semibold text-[#265768]">
+                  Assigned Subjects
+                </div>
+                <button onClick={() => setShowPopup(false)}>✕</button>
+              </div>
 
-      <div className="p-4 overflow-y-auto" style={{ maxHeight: "340px" }}>
-        {popupItems.length === 0 ? (
-          <div className="text-center text-gray-400 py-10">No data</div>
-        ) : (
-          <ul className="space-y-2">
-            {popupItems.map((x, i) => (
-              <li
-                key={i}
-                className="text-[13px] text-[#265768] border rounded px-3 py-2"
-                style={{ borderColor: "#DFDFDF" }}
+              <div
+                className="p-4 overflow-y-auto"
+                style={{ maxHeight: "340px" }}
               >
-                {x}
-              </li>
-            ))}
-          </ul>
+                {popupItems.length === 0 ? (
+                  <div className="text-center text-gray-400 py-10">No data</div>
+                ) : (
+                  <ul className="space-y-2">
+                    {popupItems.map((x, i) => (
+                      <li
+                        key={i}
+                        className="text-[13px] text-[#265768] border rounded px-3 py-2"
+                        style={{ borderColor: "#DFDFDF" }}
+                      >
+                        {x}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
         )}
-      </div>
-    </div>
-  </div>
-)}
-
       </div>
 
       {/* Scrollbar Styling (exact ClassroomData) */}
@@ -360,13 +397,3 @@ export default function Faculty({ searchQuery = "", refreshTrigger = 0 }) {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-

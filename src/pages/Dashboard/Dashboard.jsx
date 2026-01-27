@@ -1,5 +1,4 @@
 
-
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../Components/ui/Sidebar";
 import Header from "../../Components/ui/Header";
@@ -9,13 +8,21 @@ import UploadLoadset from "../../Components/Dashboard/UploadLoadset";
 import FacultyStatus from "../../Components/Dashboard/FacultyStatus";
 import { dashboardSummaryAPI } from "../../api/api";
 
+
+
 const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
+
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    setUser(JSON.parse(storedUser));
+  }
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
@@ -37,25 +44,25 @@ const Dashboard = () => {
         label: "Classroom",
         count: dashboardData.totalClassrooms,
         imageUrl:
-          "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=800&q=80",
+          "/classroom.webp",
       },
       {
         label: "Subjects",
         count: dashboardData.totalSubjects,
         imageUrl:
-          "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80",
+          "/subjects.webp",
       },
       {
         label: "Faculty",
         count: dashboardData.totalFaculties,
         imageUrl:
-          "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
+          "/faculty.webp",
       },
       {
         label: "Time Tables",
         count: dashboardData.totalApprovedTimetables,
         imageUrl:
-          "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=800&q=80",
+          "/timetable.webp",
       },
     ]
     : [
@@ -76,7 +83,7 @@ const Dashboard = () => {
             <Header />
           </div>
 
-          <div className="w-full bg-white rounded-[10px] border border-[#BFBFBF] shadow-[0_16px_40px_rgba(148,163,184,0.22)] px-8 py-12">
+          <div className="w-full bg-white rounded-[10px] border border-[#BFBFBF] shadow-[0_16px_40px_rgba(148,163,184,0.22)] px-8 py-8">
             {loading && <p className="text-center mt-10">Loading dashboard...</p>}
             {error && <p className="text-center text-red-500">{error}</p>}
 
@@ -85,7 +92,7 @@ const Dashboard = () => {
                 <section className="mb-6 flex items-start justify-between gap-8 ">
                   <div>
                     <h1 className="text-[32px] leading-tight font-bold text-[#265768] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                      Welcome back, Divyansh!
+                      Welcome back, {user?.name || "User"}!
                     </h1>
                     <p className="text-sm text-[#265768] max-w-3xl" style={{ fontFamily: 'Mulish, sans-serif' }}>
                       Your smart scheduling workspace is ready. Seamlessly manage

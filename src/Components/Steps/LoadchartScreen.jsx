@@ -88,7 +88,7 @@ export const LoadchartScreen = ({ onNext }) => {
         </div>
       </div>
 
-      <div className="flex justify-center mr-4">
+      <div className="flex justify-center items-center">
         <Button onClick={() => navigate("/dashboard")}>Connect ERP</Button>
       </div>
 

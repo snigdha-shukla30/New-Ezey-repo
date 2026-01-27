@@ -68,7 +68,7 @@ const EmailVerificationForm = ({ initialEmail = "" }) => {
             color: "#7A8C94",
           }}
         >
-          We have sent you a verification link to your given gmail
+          We have sent you a verification link to your given email
           please open your gmail to verify .
         </p>
       </div>

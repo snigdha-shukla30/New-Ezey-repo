@@ -1,6 +1,9 @@
+
+
 import React, { useState, useEffect } from "react";
 import { Edit2, Trash2 } from "lucide-react";
 import { getBatches, updateBatch, deleteBatch } from "../../api/api";
+import Swal from "sweetalert2";
 
 export default function Batches({ searchQuery, refreshTrigger }) {
   const [batches, setBatches] = useState([]);
@@ -31,34 +34,17 @@ export default function Batches({ searchQuery, refreshTrigger }) {
     }
   };
 
-  //   const fetchBatches = async () => {
-  //   try {
-  //     setLoading(true);
-
-  //     const response = await getBatches();
-
-  //      console.log("GET BATCHES RESPONSE:", response);
-
-  //     const batchList =
-  //       response?.data?.batches ||
-  //       response?.data ||
-  //       response?.batches ||
-  //       [];
-
-  //     setBatches(batchList);
-
-  //   } catch (err) {
-  //     console.error("Error fetching batches:", err);
-  //     setError(err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleDelete = async (batchId) => {
-    if (!window.confirm("Are you sure you want to delete this batch?")) {
-      return;
-    }
+    const result = await Swal.fire({
+      text: "Are you sure you want to delete this batch?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#F04438",
+      cancelButtonColor: "#4BACCE",
+      confirmButtonText: "Yes, delete",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const response = await deleteBatch(batchId);
@@ -67,7 +53,11 @@ export default function Batches({ searchQuery, refreshTrigger }) {
       }
     } catch (err) {
       console.error("Error deleting batch:", err);
-      alert(err.message || "Failed to delete batch");
+      Swal.fire({
+        icon: "error",
+        text: err.message || "Failed to delete batch",
+        confirmButtonColor: "#4BACCE",
+      });
     }
   };
 
@@ -76,20 +66,6 @@ export default function Batches({ searchQuery, refreshTrigger }) {
     setEditData({ ...batch });
   };
 
-  // const handleUpdate = async () => {
-  //   try {
-  //     const response = await updateBatch(editingId, editData);
-  //     if (response.success) {
-  //       setBatches(batches.map((b) => (b._id === editingId ? editData : b)));
-  //       setEditingId(null);
-  //       setEditData(null);
-  //     }
-  //   } catch (err) {
-  //     console.error("Error updating batch:", err);
-  //     alert(err.message || "Failed to update batch");
-  //   }
-  // };
-
   const handleUpdate = async () => {
     try {
       const response = await updateBatch(editingId, editData);
@@ -97,14 +73,18 @@ export default function Batches({ searchQuery, refreshTrigger }) {
       const updated = response?.data || editData;
 
       setBatches((prev) =>
-        prev.map((b) => (b._id === editingId ? updated : b)),
+        prev.map((b) => (b._id === editingId ? updated : b))
       );
 
       setEditingId(null);
       setEditData(null);
     } catch (err) {
       console.error("Error updating batch:", err);
-      alert(err.message || "Failed to update batch");
+      Swal.fire({
+        icon: "error",
+        text: err.message || "Failed to update batch",
+        confirmButtonColor: "#4BACCE",
+      });
     }
   };
 
@@ -116,11 +96,9 @@ export default function Batches({ searchQuery, refreshTrigger }) {
   const q = (searchQuery || "").toLowerCase();
   const filtered = batches.filter(
     (b) =>
-      // (b.name || "").toLowerCase().includes(q) ||
-      // (b.code || "").toLowerCase().includes(q) ||
       (b.degree || "").toLowerCase().includes(q) ||
       (b.batchCode || "").toLowerCase().includes(q) ||
-      (b.department || "").toLowerCase().includes(q),
+      (b.department || "").toLowerCase().includes(q)
   );
 
   if (loading) {

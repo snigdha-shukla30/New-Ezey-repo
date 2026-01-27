@@ -9,6 +9,9 @@ import {
   deleteFaculty,
   bulkUploadFaculties,
 } from "../../api/api";
+import BackButton from "../../Components/backbutton";
+import Swal from "sweetalert2";
+
 
 // Component for Upload Button (UNCHANGED)
 const Component = ({ property1, className, headingClassName, onClick }) => {
@@ -229,7 +232,12 @@ export const ManualEntryFaculty = () => {
       !validTypes.includes(file.type) &&
       !file.name.match(/\.(csv|xlsx|xls)$/i)
     ) {
-      alert("Please upload a valid CSV or XLSX file");
+      Swal.fire({
+  icon: "warning",
+  text: "Please upload a valid CSV or XLSX file",
+  confirmButtonColor: "#4BACCE",
+});
+
       event.target.value = "";
       return;
     }
@@ -244,7 +252,12 @@ export const ManualEntryFaculty = () => {
         setShowTable(true);
       }
     } catch (err) {
-      alert("Failed to upload file: " + (err.message || "Unknown error"));
+      Swal.fire({
+  icon: "error",
+  text: "Failed to upload file: " + (err.message || "Unknown error"),
+  confirmButtonColor: "#4BACCE",
+});
+
     } finally {
       setUploading(false);
       event.target.value = "";
@@ -277,6 +290,12 @@ export const ManualEntryFaculty = () => {
           await loadFaculties();
           resetForm();
           // alert("Faculty updated successfully!");
+          Swal.fire({
+  title: "Success!",
+  text: "Faculty added successfully",
+  icon: "success",
+  confirmButtonColor: "#4BACCE",
+});
         }
       } else {
         const response = await addFaculty(facultyData);
@@ -290,7 +309,13 @@ export const ManualEntryFaculty = () => {
     } catch (err) {
       const msg = err.message || "Unknown error occurred";
       setError(msg);
-      alert("Failed to save faculty: " + msg);
+      // alert("Failed to save faculty: " + msg);
+      Swal.fire({
+  icon: "error",
+  text: "Failed to save faculty: " + msg,
+  confirmButtonColor: "#4BACCE",
+});
+
     } finally {
       setLoading(false);
     }
@@ -305,25 +330,60 @@ export const ManualEntryFaculty = () => {
     setEditingId(faculty._id);
   };
 
-  const handleDelete = async (facultyId) => {
-    if (!window.confirm("Are you sure you want to delete this faculty?")) return;
+  // const handleDelete = async (facultyId) => {
+  //   if (!window.confirm("Are you sure you want to delete this faculty?")) return;
 
-    try {
-      setLoading(true);
-      setError("");
-      const response = await deleteFaculty(facultyId);
-      if (response.success) {
-        await loadFaculties();
-        // alert("Faculty deleted successfully!");
-      }
-    } catch (err) {
-      const msg = err.message || "Unknown error occurred";
-      setError(msg);
-      alert("Failed to delete faculty: " + msg);
-    } finally {
-      setLoading(false);
+  //   try {
+  //     setLoading(true);
+  //     setError("");
+  //     const response = await deleteFaculty(facultyId);
+  //     if (response.success) {
+  //       await loadFaculties();
+  //       // alert("Faculty deleted successfully!");
+  //     }
+  //   } catch (err) {
+  //     const msg = err.message || "Unknown error occurred";
+  //     setError(msg);
+  //     alert("Failed to delete faculty: " + msg);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleDelete = async (facultyId) => {
+  const result = await Swal.fire({
+    text: "Are you sure you want to delete this faculty?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#F04438",
+    cancelButtonColor: "#4BACCE",
+    confirmButtonText: "Yes",
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    setLoading(true);
+    setError("");
+    const response = await deleteFaculty(facultyId);
+    if (response.success) {
+      await loadFaculties();
     }
-  };
+  } catch (err) {
+    const msg = err.message || "Unknown error occurred";
+
+    Swal.fire({
+      icon: "error",
+      text: "Failed to delete faculty: " + msg,
+      confirmButtonColor: "#4BACCE",
+    });
+
+    setError(msg);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const resetForm = () => {
     setFacultyName("");
@@ -372,7 +432,8 @@ export const ManualEntryFaculty = () => {
                 className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition"
                 aria-label="Close"
               >
-                <X size={28} color="#265768" strokeWidth={3} />
+                {/* <X size={28} color="#265768" strokeWidth={3} /> */}
+                <BackButton />
               </button>
             </div>
 
@@ -539,7 +600,14 @@ export const ManualEntryFaculty = () => {
                     <button
                       onClick={handleAddFaculty}
                       disabled={loading}
+                      className="after:content-['']
+              after:absolute after:left-0 after:-bottom-[2px]
+              after:h-[1px] after:w-full after:bg-[#4A9FB5]
+              after:scale-x-0 after:origin-left
+              after:transition-transform after:duration-300
+              hover:after:scale-x-100"
                       style={{
+                        
                         fontSize: "12px",
                         color: "rgb(77, 172, 206)",
                         background: "transparent",

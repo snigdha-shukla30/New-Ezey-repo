@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 // ✅ shared components
 import { Button } from "../../Components/ui/Button";
 import { InputField } from "../../Components/ui/InputField";
-import Alert from "../../Components/ui/Alert";
-
+import Swal from "sweetalert2";
 
 import EmailVerificationForm from "./EmailVerificationForm";
 
@@ -23,20 +22,23 @@ const SignupForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [accountType, setAccountType] = useState("");
   const [loading, setLoading] = useState(false);
-  const [alert, setAlert] = useState(null); // { message, type }
 
-  const showAlert = (message, type = "error") => {
-    setAlert({ message, type });
+  const popup = (text, icon = "error") => {
+    Swal.fire({
+      text,
+      icon,
+      confirmButtonColor: "#4BACCE",
+    });
   };
 
   const handleSubmit = async () => {
     if (!name || !email || !password || !confirmPassword || !accountType) {
-      showAlert("Please fill all required fields", "warning");
+      popup("Please fill all required fields", "warning");
       return;
     }
 
     if (password !== confirmPassword) {
-      showAlert("Passwords do not match", "error");
+      popup("Passwords do not match", "error");
       return;
     }
 
@@ -50,43 +52,30 @@ const SignupForm = () => {
       });
 
       if (res.success) {
-        showAlert("Signup successful", "success");
-        setShowVerification(true);
+        Swal.fire({
+          text: "Signup successful",
+          icon: "success",
+          confirmButtonColor: "#4BACCE",
+        }).then(() => {
+          setShowVerification(true);
+        });
       } else {
-        showAlert(res.message || "Signup failed", "error");
+        popup(res.message || "Signup failed", "error");
       }
     } catch (error) {
       console.error(error);
-      showAlert("Something went wrong", "error");
+      popup("Something went wrong", "error");
     } finally {
       setLoading(false);
     }
   };
 
   if (showVerification) {
-    return (
-      <>
-        {alert && (
-          <Alert
-            message={alert.message}
-            type={alert.type}
-            onClose={() => setAlert(null)}
-          />
-        )}
-        <EmailVerificationForm initialEmail={email} />
-      </>
-    );
+    return <EmailVerificationForm initialEmail={email} />;
   }
 
   return (
     <>
-      {alert && (
-        <Alert
-          message={alert.message}
-          type={alert.type}
-          onClose={() => setAlert(null)}
-        />
-      )}
       <div className="mb-2 text-center">
         <p className="text-sm text-[#4A9FB5] text-left mb-2">Ezey</p>
 
@@ -109,7 +98,6 @@ const SignupForm = () => {
         <p className="text-[13px] text-[#7A8C94]">or signing up</p>
       </div>
 
-
       <div className="mb-2">
         <InputField
           width="100%"
@@ -121,7 +109,6 @@ const SignupForm = () => {
           icon={User}
         />
       </div>
-
 
       <div className="mb-2">
         <InputField
@@ -135,7 +122,6 @@ const SignupForm = () => {
         />
       </div>
 
-
       <div className="mb-2">
         <InputField
           width="100%"
@@ -143,14 +129,13 @@ const SignupForm = () => {
           label="Create Password*"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••••"
+          placeholder="Enter your passwod"
           icon={Lock}
           showPasswordToggle
           showPassword={showPassword}
           onTogglePassword={() => setShowPassword(!showPassword)}
         />
       </div>
-
 
       <div className="mb-3">
         <InputField
@@ -159,7 +144,7 @@ const SignupForm = () => {
           label="Re-Enter Password*"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="••••••••••"
+          placeholder="Confirm your password"
           icon={Lock}
           showPasswordToggle
           showPassword={showConfirmPassword}
@@ -168,7 +153,6 @@ const SignupForm = () => {
           }
         />
       </div>
-
 
       <div className="mb-4">
         <div className="relative w-1/2 mx-auto">
@@ -183,16 +167,10 @@ const SignupForm = () => {
             <option value="coordinator">coordinator</option>
             <option value="admin">admin</option>
           </select>
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L5 5L9 1" stroke="#A0AEC0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
         </div>
       </div>
 
       <div className="w-full max-w-[280px] mx-auto">
-        {/* Login Link */}
         <p className="text-right text-[11px] text-[#7A8C94] mb-2 mt-2 font-medium">
           Already a user ?{" "}
           <span
@@ -203,7 +181,6 @@ const SignupForm = () => {
           </span>
         </p>
 
-        {/* Button */}
         <div className="mb-4">
           <Button
             variant="primary"
@@ -214,15 +191,17 @@ const SignupForm = () => {
             {loading ? "Signing up..." : "Sign Up"}
           </Button>
         </div>
-
       </div>
-
-
     </>
   );
 };
 
 export default SignupForm;
+
+
+
+
+
 
 
 

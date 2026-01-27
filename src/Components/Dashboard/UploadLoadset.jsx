@@ -13,7 +13,7 @@ const UploadLoadset = () => {
       }}
     >
       {/* Heading */}
-      <h3 className="text-[16px] font-semibold text-[#265768] text-center">
+      <h3 className="text-[16px] font-semibold text-[#265768] text-center mb-1">
         Quick Actions <span className="text-[15px]" style={{ filter: 'hue-rotate(180deg) saturate(0.2)' }}>⚡</span>
       </h3>
 

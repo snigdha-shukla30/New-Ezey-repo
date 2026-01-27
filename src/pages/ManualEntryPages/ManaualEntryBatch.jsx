@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from "react";
 import { Edit2, Trash2, X } from "lucide-react";
 import nodata from "../../assets/images/nodataa.png";
@@ -11,6 +10,9 @@ import {
   getFaculties,
 } from "../../api/api";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../../Components/backbutton";
+import Swal from "sweetalert2";
+
 
 // ============================================
 // MULTISELECT COMPONENT
@@ -56,10 +58,13 @@ function MultiSelect({
   };
 
   const filteredOptions = options.filter((option) => {
-    const isNotSelected = !selectedItems.some((item) => item._id === option._id);
+    const isNotSelected = !selectedItems.some(
+      (item) => item._id === option._id,
+    );
     const matchesSearch =
       option[displayKey]?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (secondaryKey && option[secondaryKey]?.toLowerCase().includes(searchTerm.toLowerCase()));
+      (secondaryKey &&
+        option[secondaryKey]?.toLowerCase().includes(searchTerm.toLowerCase()));
     return isNotSelected && matchesSearch;
   });
 
@@ -74,8 +79,8 @@ function MultiSelect({
   const selectStyle = {
     width: "100%",
     height: "40px",
-    borderRadius: "8px",
     border: "1.5px solid #DFDFDF",
+    borderRadius: "8px",
     fontSize: "14px",
     fontFamily: "'Mulish', sans-serif",
     color: "#000000",
@@ -103,7 +108,9 @@ function MultiSelect({
           color: selectedItems.length === 0 ? "#999" : "#000",
         }}
       >
-        {selectedItems.length === 0 ? placeholder : `${selectedItems.length} selected`}
+        {selectedItems.length === 0
+          ? placeholder
+          : `${selectedItems.length} selected`}
       </div>
 
       {isOpen && (
@@ -187,7 +194,13 @@ function MultiSelect({
                     {option[displayKey]}
                   </div>
                   {secondaryKey && option[secondaryKey] && (
-                    <div style={{ fontSize: "12px", color: "#666", marginTop: "2px" }}>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "#666",
+                        marginTop: "2px",
+                      }}
+                    >
                       {option[secondaryKey]}
                     </div>
                   )}
@@ -198,57 +211,6 @@ function MultiSelect({
         </div>
       )}
 
-      {selectedItems.length > 0 && (
-        <div
-          style={{
-            marginTop: "8px",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "6px",
-          }}
-        >
-          {selectedItems.map((item) => (
-            <div
-              key={item._id}
-              style={{
-                background: "#E8F4F8",
-                color: "#265768",
-                padding: "5px 12px",
-                borderRadius: "16px",
-                fontSize: "12px",
-                fontFamily: "'Mulish', sans-serif",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                border: "1px solid #D0E8F0",
-              }}
-            >
-              <span>
-                {item[displayKey]}
-                {secondaryKey && item[secondaryKey] && ` (${item[secondaryKey]})`}
-              </span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemove(item._id);
-                }}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#265768",
-                  cursor: "pointer",
-                  padding: "0",
-                  fontSize: "18px",
-                  lineHeight: "1",
-                  fontWeight: "bold",
-                }}
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
@@ -414,7 +376,13 @@ export default function ManualEntryBatch() {
   };
 
   const handleAddBatch = async () => {
-    if (!form.course || !form.department || !form.name || !form.strength || !form.semester) {
+    if (
+      !form.course ||
+      !form.department ||
+      !form.name ||
+      !form.strength ||
+      !form.semester
+    ) {
       setError("Please fill all required fields");
       return;
     }
@@ -468,18 +436,27 @@ export default function ManualEntryBatch() {
     const subjects = batch.raw?.subjects || batch.subjects || [];
 
     const subjectsFromBatch = Array.isArray(subjects)
-      ? subjects.map((s) => (typeof s.subject === "object" ? s.subject : s)).filter(Boolean)
+      ? subjects
+          .map((s) => (typeof s.subject === "object" ? s.subject : s))
+          .filter(Boolean)
       : [];
 
     const facultiesFromBatch = Array.isArray(subjects)
-      ? subjects.map((s) => (typeof s.faculty === "object" ? s.faculty : s)).filter(Boolean)
+      ? subjects
+          .map((s) => (typeof s.faculty === "object" ? s.faculty : s))
+          .filter(Boolean)
       : [];
 
     setForm({
       course: batch.course || batch.degree || "",
       department: batch.department || "",
       name: batch.section || batch.name || batch.raw?.name || "",
-      strength: (batch.capacity || batch.strength || batch.raw?.strength)?.toString?.() || "",
+      strength:
+        (
+          batch.capacity ||
+          batch.strength ||
+          batch.raw?.strength
+        )?.toString?.() || "",
       semester: batch.semester?.toString?.() || "",
       subjects: subjectsFromBatch,
       faculties: facultiesFromBatch,
@@ -489,20 +466,49 @@ export default function ManualEntryBatch() {
     setError("");
   };
 
-  const handleDeleteBatch = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this batch?")) return;
+  // const handleDeleteBatch = async (id) => {
+  //   if (!window.confirm("Are you sure you want to delete this batch?")) return;
 
-    try {
-      setLoading(true);
-      setError("");
-      const res = await deleteBatch(id);
-      if (res?.success) await loadBatches();
-    } catch (err) {
-      setError(err.message || "Failed to delete batch");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //   try {
+  //     setLoading(true);
+  //     setError("");
+  //     const res = await deleteBatch(id);
+  //     if (res?.success) await loadBatches();
+  //   } catch (err) {
+  //     setError(err.message || "Failed to delete batch");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleDeleteBatch = async (id) => {
+  const result = await Swal.fire({
+    text: "Are you sure you want to delete this batch?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#DC3545",
+    cancelButtonColor: "#4BACCE",
+    confirmButtonText: "Yes",
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    setLoading(true);
+    setError("");
+    const res = await deleteBatch(id);
+    if (res?.success) await loadBatches();
+  } catch (err) {
+    Swal.fire({
+      icon: "error",
+      text: err.message || "Failed to delete batch",
+      confirmButtonColor: "#4BACCE",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const resetForm = () => {
     setForm({
@@ -561,7 +567,8 @@ export default function ManualEntryBatch() {
                 className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition"
                 aria-label="Close"
               >
-                <X size={28} color="#265768" strokeWidth={3} />
+                {/* <X size={28} color="#265768" strokeWidth={3} /> */}
+                <BackButton />
               </button>
             </div>
 
@@ -579,33 +586,7 @@ export default function ManualEntryBatch() {
                 </h2>
               </div>
 
-              <div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".csv,.xlsx,.xls"
-                  onChange={handleFileChange}
-                  hidden
-                />
-                <button
-                  onClick={triggerFile}
-                  style={{
-                    minWidth: 170,
-                    height: 34,
-                    background:
-                      "linear-gradient(0deg, #265768 0%, #4BACCE 100%)",
-                    borderRadius: 6,
-                    color: "white",
-                    fontSize: 12,
-                    fontFamily: "'Mulish', sans-serif",
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.12)",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  Upload File ( CSV / XLSX )
-                </button>
-              </div>
+             
             </div>
 
             <div
@@ -712,17 +693,57 @@ export default function ManualEntryBatch() {
                 />
               </div>
 
-              <div className="lg:col-span-3 flex items-end justify-start lg:justify-end">
+              {/* <div className="lg:col-span-3 flex relative items-end justify-start lg:justify-end">
                 <button
                   onClick={handleAddBatch}
                   disabled={loading}
-                  className="h-[40px] flex items-center text-[12px] font-['Mulish'] text-[#9CA3AF] hover:text-[#4BACCE] whitespace-nowrap transition-colors"
+                  className=" flex items-center text-[12px] font-['Mulish'] text-[#9CA3AF] after:content-['']
+              after:absolute after:left-0 after:-bottom-[2px]
+              after:h-[1px] after:w-full after:bg-[#4A9FB5]
+              after:scale-x-0 after:origin-left
+              after:transition-transform after:duration-300
+              hover:after:scale-x-100 hover:text-[#4BACCE] whitespace-nowrap transition-colors "
+                  style={{
+                    fontSize: "12px",
+                    color: "rgb(77, 172, 206)",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "'Mulish', sans-serif",
+                    whiteSpace: "nowrap",
+                    opacity: loading ? 0.6 : 1,
+                  }}
                 >
                   {loading
                     ? "Processing..."
                     : editingId
                       ? "+ Update batch"
                       : "+ Add batch"}
+                </button>
+              </div> */}
+              <div className="lg:col-span-3 flex items-end justify-start lg:justify-end">
+                <button
+                  onClick={handleAddBatch}
+                  disabled={loading}
+                  style={{
+                    fontSize: "12px",
+                    color: "rgb(77, 172, 206)",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "'Mulish', sans-serif",
+                    position: "relative",
+                    whiteSpace: "nowrap",
+                    opacity: loading ? 0.6 : 1,
+                  }}
+                  className=" flex items-center text-[12px] font-['Mulish'] text-[#9CA3AF] after:content-['']
+              after:absolute after:left-0 after:-bottom-[2px]
+              after:h-[1px] after:w-full after:bg-[#4A9FB5]
+              after:scale-x-0 after:origin-left
+              after:transition-transform after:duration-300
+              hover:after:scale-x-100 hover:text-[#4BACCE] whitespace-nowrap transition-colors"
+                >
+                  {loading ? "Adding..." : "+ Add batch"}
                 </button>
               </div>
             </div>
@@ -767,7 +788,8 @@ export default function ManualEntryBatch() {
                   <div
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1.2fr 1.2fr 100px",
+                      gridTemplateColumns:
+                        "1fr 1fr 1fr 1fr 1fr 1.2fr 1.2fr 100px",
                       background: "#F8F9FA",
                       borderBottom: "2px solid #4BACCE",
                       fontFamily: "'Mulish', sans-serif",
@@ -784,22 +806,31 @@ export default function ManualEntryBatch() {
                     <div style={{ padding: "14px 16px" }}>Capacity</div>
                     <div style={{ padding: "14px 16px" }}>Semester</div>
                     <div style={{ padding: "14px 16px" }}>Section</div>
-                    <div style={{ padding: "14px 16px" }}>Assigned Subjects</div>
+                    <div style={{ padding: "14px 16px" }}>
+                      Assigned Subjects
+                    </div>
                     <div style={{ padding: "14px 16px" }}>Assigned Faculty</div>
-                    <div style={{ padding: "14px 16px", textAlign: "center" }}>Actions</div>
+                    <div style={{ padding: "14px 16px", textAlign: "center" }}>
+                      Actions
+                    </div>
                   </div>
 
                   <div>
                     {batches.map((batch, index) => {
-                      const subjects = batch.raw?.subjects || batch.subjects || [];
+                      const subjects =
+                        batch.raw?.subjects || batch.subjects || [];
 
                       return (
                         <div
                           key={batch._id || `batch-${index}`}
                           style={{
                             display: "grid",
-                            gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1.2fr 1.2fr 100px",
-                            borderBottom: index < batches.length - 1 ? "1px solid #E8E8E8" : "none",
+                            gridTemplateColumns:
+                              "1fr 1fr 1fr 1fr 1fr 1.2fr 1.2fr 100px",
+                            borderBottom:
+                              index < batches.length - 1
+                                ? "1px solid #E8E8E8"
+                                : "none",
                             fontFamily: "'Mulish', sans-serif",
                             fontSize: "13px",
                             color: "#333",
@@ -813,13 +844,19 @@ export default function ManualEntryBatch() {
                             {batch.department || "-"}
                           </div>
                           <div style={{ padding: "14px 16px" }}>
-                            {batch.capacity || batch.strength || batch.raw?.strength || "-"}
+                            {batch.capacity ||
+                              batch.strength ||
+                              batch.raw?.strength ||
+                              "-"}
                           </div>
                           <div style={{ padding: "14px 16px" }}>
                             {batch.semester || "-"}
                           </div>
                           <div style={{ padding: "14px 16px" }}>
-                            {batch.section || batch.name || batch.raw?.name || "-"}
+                            {batch.section ||
+                              batch.name ||
+                              batch.raw?.name ||
+                              "-"}
                           </div>
                           <div style={{ padding: "14px 16px" }}>
                             {subjects.length > 0 ? (
@@ -827,7 +864,7 @@ export default function ManualEntryBatch() {
                                 onClick={() =>
                                   openListPopup(
                                     "Assigned Subjects",
-                                    subjects.map((p) => p.subject)
+                                    subjects.map((p) => p.subject),
                                   )
                                 }
                                 style={{
@@ -852,7 +889,7 @@ export default function ManualEntryBatch() {
                                 onClick={() =>
                                   openListPopup(
                                     "Assigned Faculty",
-                                    subjects.map((p) => p.faculty)
+                                    subjects.map((p) => p.faculty),
                                   )
                                 }
                                 style={{
@@ -933,20 +970,27 @@ export default function ManualEntryBatch() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between px-5 py-3 border-b">
-                  <div className="text-[16px] font-semibold text-[#265768]">{popupTitle}</div>
+                  <div className="text-[16px] font-semibold text-[#265768]">
+                    {popupTitle}
+                  </div>
                   <button onClick={() => setShowPopup(false)}>
                     <X size={18} color="#265768" />
                   </button>
                 </div>
 
-                <div className="p-4 overflow-y-auto" style={{ maxHeight: "340px" }}>
+                <div
+                  className="p-4 overflow-y-auto"
+                  style={{ maxHeight: "340px" }}
+                >
                   {popupItems.length === 0 ? (
-                    <div className="text-center text-gray-400 py-10">No data</div>
+                    <div className="text-center text-gray-400 py-10">
+                      No data
+                    </div>
                   ) : (
                     <ul className="space-y-2">
                       {popupItems.map((x, i) => (
                         <li
-                          key={`${x?._id || 'item'}-${i}`}
+                          key={`${x?._id || "item"}-${i}`}
                           className="text-[13px] text-[#265768] border rounded px-3 py-2"
                           style={{ borderColor: "#DFDFDF" }}
                         >

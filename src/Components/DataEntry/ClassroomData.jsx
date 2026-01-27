@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Edit2, Trash2 } from "lucide-react";
 import { getClassrooms, deleteClassroom, updateClassroom } from "../../api/api";
+import Swal from "sweetalert2";
 
 export default function ClassroomData({ searchQuery, refreshTrigger }) {
   const [classrooms, setClassrooms] = useState([]);
@@ -32,21 +33,35 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
   };
 
   const handleDelete = async (classroomId, classroomName) => {
-    if (!window.confirm(`Are you sure you want to delete "${classroomName}"?`)) {
-      return;
-    }
+    const result = await Swal.fire({
+      text: `Are you sure you want to delete "${classroomName}"?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#F04438",
+      cancelButtonColor: "#4BACCE",
+      confirmButtonText: "Yes, delete",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const response = await deleteClassroom(classroomId);
       if (response.success) {
         setClassrooms(classrooms.filter((c) => c._id !== classroomId));
-        
       } else {
-        alert(response.message || "Failed to delete classroom");
+        Swal.fire({
+          icon: "error",
+          text: response.message || "Failed to delete classroom",
+          confirmButtonColor: "#4BACCE",
+        });
       }
     } catch (err) {
       console.error("Error deleting classroom:", err);
-      alert(err.message || "Failed to delete classroom");
+      Swal.fire({
+        icon: "error",
+        text: err.message || "Failed to delete classroom",
+        confirmButtonColor: "#4BACCE",
+      });
     }
   };
 
@@ -57,11 +72,19 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
 
   const handleUpdate = async () => {
     if (!editData.type.trim()) {
-      alert("Classroom type is required");
+      Swal.fire({
+        icon: "warning",
+        text: "Classroom type is required",
+        confirmButtonColor: "#4BACCE",
+      });
       return;
     }
     if (!editData.capacity || editData.capacity <= 0) {
-      alert("Valid capacity is required");
+      Swal.fire({
+        icon: "warning",
+        text: "Valid capacity is required",
+        confirmButtonColor: "#4BACCE",
+      });
       return;
     }
 
@@ -79,13 +102,20 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
         );
         setEditingId(null);
         setEditData(null);
-       
       } else {
-        alert(response.message || "Failed to update classroom");
+        Swal.fire({
+          icon: "error",
+          text: response.message || "Failed to update classroom",
+          confirmButtonColor: "#4BACCE",
+        });
       }
     } catch (err) {
       console.error("Error updating classroom:", err);
-      alert(err.message || "Failed to update classroom");
+      Swal.fire({
+        icon: "error",
+        text: err.message || "Failed to update classroom",
+        confirmButtonColor: "#4BACCE",
+      });
     }
   };
 
@@ -104,7 +134,6 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
       style={{ maxWidth: "1068px", minHeight: "293px" }}
     >
       <div className="px-8 pt-4">
-        {/* TABLE HEADER (Fixed column widths) */}
         <table className="w-full table-fixed">
           <colgroup>
             <col style={{ width: "25%" }} />
@@ -123,38 +152,31 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
           </thead>
         </table>
 
-        {/* Blue Divider (aligned with table width) */}
-        <div className="h-[3px] w-full bg-[#0077FF] rounded-full shadow-[0px_4px_4px_0px_#00000040]
-" />
+        <div className="h-[3px] w-full bg-[#0077FF] rounded-full shadow-[0px_4px_4px_0px_#00000040]" />
       </div>
 
-      {/* BODY */}
       <div
         className="overflow-y-auto custom-scroll px-8 pr-5 mr-1.5"
         style={{ maxHeight: "calc(293px - 76px)" }}
       >
-        {/* Loading */}
         {isLoading && (
           <div className="flex items-center justify-center py-10 text-[#8A96A8]">
             Loading classrooms...
           </div>
         )}
 
-        {/* Error */}
         {!isLoading && error && (
           <div className="flex items-center justify-center py-10 text-red-500 text-sm">
             {error}
           </div>
         )}
 
-        {/* Empty */}
         {!isLoading && !error && filtered.length === 0 && (
           <div className="flex items-center justify-center py-10 text-[#8A96A8]">
             {searchQuery ? "No classrooms found" : "No classrooms added yet"}
           </div>
         )}
 
-        {/* Table Body */}
         {!isLoading && !error && filtered.length > 0 && (
           <table className="w-full table-fixed">
             <colgroup>
@@ -172,12 +194,10 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
                     idx === filtered.length - 1 ? "border-b-0" : ""
                   }`}
                 >
-                  {/* Classroom Name */}
                   <td className="py-5 text-center text-[#4C5968]">
                     {room.name}
                   </td>
 
-                  {/* Type */}
                   <td className="py-5 text-center text-[#8A96A8] capitalize">
                     {editingId === room._id ? (
                       <input
@@ -193,7 +213,6 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
                     )}
                   </td>
 
-                  {/* Capacity */}
                   <td className="py-5 text-center text-[#8A96A8]">
                     {editingId === room._id ? (
                       <input
@@ -210,7 +229,6 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
                     )}
                   </td>
 
-                  {/* Actions */}
                   <td className="py-5">
                     {editingId === room._id ? (
                       <div className="flex items-center justify-center gap-2">
@@ -251,7 +269,6 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
         )}
       </div>
 
-      {/* Scrollbar Styling */}
       <style>{`
         .custom-scroll::-webkit-scrollbar {
           width: 9.78px;
@@ -276,14 +293,6 @@ export default function ClassroomData({ searchQuery, refreshTrigger }) {
     </div>
   );
 }
-
-
-
-
-
-
-
-
 
 
 

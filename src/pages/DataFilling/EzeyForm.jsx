@@ -5,7 +5,7 @@ import { LoadchartScreen } from "../../Components/Steps/LoadchartScreen";
 import { ManualEntryScreen } from "../../Components/Steps/ManualEntryScreen";
 
 const EzeyForm = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(3);
 
   const handleNext = () => {
     if (currentStep < 3) setCurrentStep(currentStep + 1);

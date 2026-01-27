@@ -8,6 +8,9 @@ import {
   deleteSubjectAPI,
   updateSubjectAPI, bulkUploadSubjects
 } from "../../api/api";
+import BackButton from "../../Components/backbutton";
+import Swal from "sweetalert2";
+
 
 
 // =============================
@@ -67,7 +70,13 @@ export default function ManualEntrySubject() {
     !validTypes.includes(file.type) &&
     !file.name.match(/\.(csv|xlsx|xls)$/i)
   ) {
-    alert("Please upload a valid CSV or XLSX file");
+    // alert("Please upload a valid CSV or XLSX file");
+    Swal.fire({
+  icon: "warning",
+  text: "Please upload a valid CSV or XLSX file",
+  confirmButtonColor: "#4BACCE",
+});
+
     e.target.value = "";
     return;
   }
@@ -82,7 +91,13 @@ export default function ManualEntrySubject() {
       await fetchSubjects();
     }
   } catch (err) {
-    alert("Failed to upload file: " + (err.message || "Unknown error"));
+    // alert("Failed to upload file: " + (err.message || "Unknown error"));
+    Swal.fire({
+  icon: "error",
+  text: "Failed to upload file: " + (err.message || "Unknown error"),
+  confirmButtonColor: "#4BACCE",
+});
+
   } finally {
     setLoading(false);
     e.target.value = "";
@@ -204,22 +219,53 @@ export default function ManualEntrySubject() {
     setError("");
   };
 
+  // const handleDeleteSubject = async (id) => {
+  //   if (!window.confirm("Are you sure you want to delete this subject?")) return;
+
+  //   try {
+  //     setLoading(true);
+  //     setError("");
+
+  //     const response = await deleteSubjectAPI(id);
+
+  //     if (response.success) await fetchSubjects();
+  //   } catch (err) {
+  //     alert("Failed to delete subject: " + err.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleDeleteSubject = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this subject?")) return;
+  const result = await Swal.fire({
+    text: "Are you sure you want to delete this subject?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#F04438",
+    cancelButtonColor: "#4BACCE",
+    confirmButtonText: "Yes",
+  });
 
-    try {
-      setLoading(true);
-      setError("");
+  if (!result.isConfirmed) return;
 
-      const response = await deleteSubjectAPI(id);
+  try {
+    setLoading(true);
+    setError("");
 
-      if (response.success) await fetchSubjects();
-    } catch (err) {
-      alert("Failed to delete subject: " + err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const response = await deleteSubjectAPI(id);
+
+    if (response.success) await fetchSubjects();
+  } catch (err) {
+    Swal.fire({
+      icon: "error",
+      text: "Failed to delete subject: " + err.message,
+      confirmButtonColor: "#4BACCE",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="h-screen overflow-hidden bg-[#F3F6FB]">
@@ -245,7 +291,9 @@ export default function ManualEntrySubject() {
                 className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition"
                 aria-label="Close"
               >
-                <X size={28} color="#265768" strokeWidth={3} />
+                {/* <X size={28} color="#265768" strokeWidth={3} /> */}
+                <BackButton />
+
               </button>
             </div>
 
@@ -263,7 +311,7 @@ export default function ManualEntrySubject() {
                 </h2>
               </div>
 
-              <div>
+              {/* <div>
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -286,7 +334,7 @@ export default function ManualEntrySubject() {
                 >
                   Upload File ( CSV / XLSX )
                 </button>
-              </div>
+              </div> */}
             </div>
 
             <div
@@ -329,6 +377,12 @@ export default function ManualEntrySubject() {
                     <button
                       onClick={saveSubject}
                       disabled={loading}
+                      className="after:content-['']
+              after:absolute after:left-0 after:-bottom-[2px]
+              after:h-[1px] after:w-full after:bg-[#4A9FB5]
+              after:scale-x-0 after:origin-left
+              after:transition-transform after:duration-300
+              hover:after:scale-x-100"
                       style={{
                         fontSize: "12px",
                         color: "rgb(77, 172, 206)",
@@ -340,6 +394,7 @@ export default function ManualEntrySubject() {
                         top: "50px",
                         whiteSpace: "nowrap",
                         opacity: loading ? 0.6 : 1,
+                      
                       }}
                     >
                       {editingId ? (loading ? "Updating..." : "+ Update subject") : loading ? "Adding..." : "+ Add subject"}

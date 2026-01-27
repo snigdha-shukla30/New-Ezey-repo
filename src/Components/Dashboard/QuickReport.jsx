@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 import React, { useEffect, useState } from "react";
 import { Users, School, Calendar, BarChart2 } from "lucide-react";
 import { dashboardSummaryAPI } from "../../api/api"; // ✅ path apne project ke hisaab se adjust karna

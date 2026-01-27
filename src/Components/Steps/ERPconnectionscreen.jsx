@@ -37,7 +37,7 @@ export const ERPConnectionScreen = ({ onNext }) => {
           />
         </div>
 
-        <div className="flex justify-center md:mr-4">
+        <div className="flex justify-center items-center md:mr-4">
           <Button onClick={() => navigate("/dashboard")}>Connect ERP</Button>
         </div>
       </div>

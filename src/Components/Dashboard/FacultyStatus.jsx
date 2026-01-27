@@ -53,7 +53,7 @@ const FacultyStatus = () => {
 
       {/* Faculty List Container */}
       <div
-        className="rounded-[10px] border border-[#E5E7EB] custom-scroll mx-2 my-2 h-[318px]"
+        className="rounded-[10px] border border-[#E5E7EB] custom-scroll mx-2 my-2  h-[318px]"
         style={{
           width: "320px",
           height: "318px",

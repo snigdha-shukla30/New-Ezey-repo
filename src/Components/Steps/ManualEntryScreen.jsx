@@ -58,7 +58,7 @@ export const ManualEntryScreen = () => {
         })}
       </div>
 
-      <div className="flex justify-center mr-10">
+      <div className="flex justify-center items-center ">
         <Button onClick={() => navigate("/dashboard")}>Submit Data</Button>
       </div>
 
