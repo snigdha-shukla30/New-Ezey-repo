@@ -254,7 +254,7 @@ export default function ManualEntrySubject() {
 
     const response = await deleteSubjectAPI(id);
 
-    if (response.success) await fetchSubjects();
+    if (response.success || response?.status) await fetchSubjects();
   } catch (err) {
     Swal.fire({
       icon: "error",
